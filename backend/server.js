@@ -37,7 +37,6 @@ memberRoutes.route('/register').get(function (req, res) {
 });
 memberRoutes.route('/register').post(async function (req, res) {
     let member = new Member(req.body);
-    console.log(member);
     //gestion des erreurs Mern d03 attention l'affichage utilisateur se gère coté app.js ou component.js
     let errors = await generateErrorsForRegister(req, member);
     if (errors.length > 0) {
@@ -67,10 +66,10 @@ memberRoutes.route('/login').post(async function (req, res) {
     let errors = [];
     if (members.length == 0) {
         console.log("Incorrect Login");
-        errors.push("Incorrect Password or Login");
+        errors.push("Failliure in connection or Incorrect Password or Login");
         res.status(200).json({ 'route': '/login', 'status': "KO", 'errors': errors });
         //Arret de la stack ici
-        return;
+        throw errors;
     } else {
         console.log(await members);
         let member = await members[0];
@@ -82,12 +81,12 @@ memberRoutes.route('/login').post(async function (req, res) {
             // ATTENTION LES REDIRECTS ROOTS SONT DU COTE COMPONENT
             res.status(200).json({ 'route': '/post/create', 'status': 'OK', 'member': req.body.login + ' connected successfully' });
         } else {
-            console.log("Failliure in connection or Incorrect Password or Login");
+            console.log("Failliure in connection or Incorrect Password");
             errors.push("Failliure in connection or Incorrect Password or Login");
             res.status(200).json({ 'route': '/login', 'status': 'KO', 'errors': errors });
+            throw errors;
         }
     }
-
 });
 memberRoutes.route('/update/:id').post(function (req, res) {
     Member.findById(req.params.id, function (err, member) {
@@ -109,8 +108,10 @@ memberRoutes.route('/update/:id').post(function (req, res) {
 });
 memberRoutes.route('/list').get(async function (req, res) {
     let membersList = await Member.find();
+    let errors = [];
     if (membersList.length == 0) {
-        errors = "no members in data base."
+        errors = "no members in data base.";
+        errors.push("no members in data base.");
         console.log(errors);
         res.status(200).json({ 'route': '/list', 'status': 'KO', 'errors': errors });
         return (errors);
@@ -211,16 +212,15 @@ postRoutes.route('/create').get(function (req, res) {
 });
 postRoutes.route('/create').post(async function (req, res) {
     let post = new Post(req.body);
-    console.log(post);
-    let errors = [];
-    //TODO ?
+    let errors = await generateErrorsForPostsCreate(req);
+    console.log("errors length " + errors.length);
     if (errors.length > 0) {
-        res.status(200).json({ 'errors': errors })
+        res.status(200).json({ 'errors': errors });
         return;
     } else {
         post.save()
             .then(post => {
-                res.status(200).json({ 'route': '/post/create', 'status': "OK", 'member': 'member added successfully' });
+                res.status(200).json({ 'route': '/post/create', 'status': "OK", 'post': 'post added successfully' });
                 //attention les redirects ne se font pas du côté server mais du côté component !!!! reférence create-memeber.component
             })
             .catch(errors => {
@@ -228,9 +228,19 @@ postRoutes.route('/create').post(async function (req, res) {
             });
     }
 });
-//http://127.0.0.1:4242/post/list/:id'
-postRoutes.route('/list/:id').get(function (req, res) {
-    //res.render('create-member.component');
+//http://localhost:4242/post/list
+postRoutes.route('/list').get(async function (req, res) {
+    let postsList = await Post.find();
+    let errors = [];
+    if (postsList.length == 0){
+        errors = "no posts in data base."
+        errors.push("no posts in data base.");
+        console.log(errors);
+        res.status(200).json({ 'route': '/list', 'status': 'KO', 'errors': errors });
+        return (errors);
+    } else {
+        res.json(postsList);
+    }
 });
 postRoutes.route('/list/:id').post(function (req, res) {
     //res.render('create-member.component');
@@ -258,7 +268,71 @@ postRoutes.route(':id/update').post(function (req, res) {
 });
 app.use('/post', postRoutes);
 /* FIN des ROUTES POSTS--------------------------------------------------------------------*/
-
+/* DEBUT des FONCTIONS UTILES POSTS---------------------------------------------------------------*/
+async function doesMyPostHaveEnoughChar(req) {
+    var curentContent = req.body.content;
+    if (curentContent !== undefined) {
+        console.log("On a un curentContent");
+    }
+    if (curentContent !== undefined && curentContent.length > 5) {
+        console.log("On retroune true dans doesMyPostHasEnoughChar")
+        return true;
+    }
+    return false;
+}
+async function doesMyPostHaveTooManyChar(req) {
+    var curentContent = req.body.content;
+    if (curentContent.length >= 140) {
+        console.log("On retroune true dans doesMyPostHave TooMany Char")
+        return true;
+    }
+    return false;
+}
+async function doesMyAuthorHaveAArrobass(req) {
+    var curentAuthor = req.body.author;
+    if (curentAuthor !== undefined) {
+        console.log("on a un curent Author.");
+    } if (curentAuthor !== undefined && curentAuthor.startsWith("@") ){
+        return true;
+    }
+return false;
+}
+async function doesMyPostHaveTooManyChar(req) {
+    var curentContent = req.body.content;
+    if (curentContent.length >= 140) {
+        return true;
+    }
+    return false;
+}
+/*async function doesMyPostHaveDate(req) {
+    var curentDate = req.body.date;
+    console.log("date server ="+req.body.date)
+    if (curentDate instanceof Date) {
+        return true;
+    } 
+    return false;
+}*/
+async function generateErrorsForPostsCreate(req) {
+    let errors = [];
+    if (await doesMyPostHaveEnoughChar(req) == false) {
+        errors.push("Your post must at leest be 5 char long.");
+        console.log("Your post must at leest be 5 char long.");
+    }
+    if (await doesMyAuthorHaveAArrobass(req) == false){
+        errors.push("Technical error with your login.");
+        console.log("Problem of @ on variable Author, see post-creator.");
+    }
+    if (await doesMyPostHaveTooManyChar(req) == true ){
+        errors.push("Your post must not be longer than 140 char.");
+        console.log("Problem of @ on variable Author, see post-creator.");
+    }
+    /*if (await doesMyPostHaveDate(req) == false ){
+        errors.push("Technical error.");
+        console.log("Problem with date.");
+    }*/
+    return errors;
+}
+/* FIN des FONCTIONS UTILES POSTS---------------------------------------------------------------*/
 app.listen(PORT, function () {
     console.log("Server is running on Port: " + PORT);
 });

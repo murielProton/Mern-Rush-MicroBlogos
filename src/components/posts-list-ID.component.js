@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-export default class PostList extends Component {
+export default class PostsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,43 +13,42 @@ export default class PostList extends Component {
 
     }
     componentDidMount() {
-        axios.get('http://localhost:4242/post/list')
+        axios.post('http://localhost:4242/post/list/:id')
             .then(response => {
-                this.setState({ posts: response.data });
+                this.setState({ members: response.data });
                 console.log(response.data);
             }).catch(errors => {
-                console.log(errors);
+                //J'attrape les erreurs
             });
     }
     postList() {
-        return this.state.posts.map(function (currentPost, i) {
-            console.log(currentPost)
-            return <PostList post={currentPost} key={i} />;
+        return this.state.posts.map(function (currentMember, i) {
+            return <PostsList member={currentMember} key={i} />;
         })
     }
     render() {
         return (
             <div>
-                <h3>Posts List</h3>
+                <h3>My Blog</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
                 <table className="table table-striped" style={{ marginTop: 20 }} >
                     <thead>
                         <tr>
-                            <th>Author</th>
-                            <th>Key Word</th>
-                            <th>Date</th>
+                            <th>Title</th>
                             <th>Content</th>
+                            <th>Author</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.posts.map((item) =>
-                            <tr key={item.author.toString()}>
-                                <td>{item.author}</td>
-                                <td>{item.key_word}</td>
-                                <td> {item.date}</td>
+                            <tr>
+                                <td> {item.title}</td>
                                 <td> {item.content}</td>
+                                <td> {item.author}</td>
+                                <td> {item.date}</td>
                             </tr>
                         )}
                     </tbody>

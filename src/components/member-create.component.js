@@ -16,8 +16,6 @@ export default class CreateMember extends Component {
         this.onChangeMemberConfirmationPassword = this.onChangeMemberConfirmationPassword.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
-
-
         this.state = {
             member_login: '',
             member_email: '',
