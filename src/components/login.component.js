@@ -66,6 +66,10 @@ export default class Login extends Component {
                     this.props.setLogin(this.state.login);
                     console.log(this.props.getLogin());
                 } else {
+                    //this.setState({errors:res.data.errors}) récupère les errors côté server !!! YES !
+                    this.setState({
+                        errors:res.data.errors
+                    });
                     console.log("Fail to connect.")
                     console.log(res.data.errors);
                 }

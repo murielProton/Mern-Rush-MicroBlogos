@@ -1,6 +1,5 @@
 /* Route /member/list*/
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default class MemberList extends Component {
@@ -14,17 +13,13 @@ export default class MemberList extends Component {
     componentDidMount() {
         axios.get('http://localhost:4242/member/list')
             .then(response => {
-                this.setState({members:response.data});
+                this.setState({ members: response.data });
                 console.log(response.data);
-            
-        })
-        .catch(function(errors){
-            console.log(errors);
-        })
+            }).catch(function (errors) {
+                console.log(errors);
+            })
     }
-
     memberList() {
-        
         return this.state.members.map(function (currentMember, i) {
             return <MemberList member={currentMember} key={i} />;
         })

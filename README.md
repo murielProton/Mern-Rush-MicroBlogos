@@ -32,3 +32,32 @@ ATTENTION let errors = [], doit être déclarer dans chacunes des fonctions qui 
 
 pour ce qui est de la gestion de session passer par la varieble localStorage -> regarder la doc
 https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage
+
+Dans les Shema/Model Mongoose pas de - mais des _. Pas de Kebab case mais du snake case.
+
+REGEX
+    [] : The char class
+    ^ : Inside the char class ^ is the negator when it appears in the beginning.
+    \s : short for a white space
+    - : a literal hyphen. A hyphen is a meta char inside a char class but not when it appears in the beginning or at the end.
+début du regex en javaScript =/ à tester
+fin du regex en javaScript =/ à tester
+
+Code pour trouver les @ ou # dans un string
+const testMessage = '#keyword #second fdezfez #trois @toto';
+const myListHash =[];
+const myListPeople =[];
+//spit par espaces
+testMessage.split(" ").forEach(element => {
+    //récupérer que les mots commencant par #
+		if(element.startsWith("#")){
+          myListHash.push(element)
+  			console.log(element);
+		}
+  		if(element.startsWith("@")){
+          myListPeople.push(element)
+  			console.log(element);
+		}
+	});
+console.log(myListHash);
+console.log(myListPeople);

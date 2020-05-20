@@ -12,14 +12,15 @@ import EditMember from "./components/member-edit.component";
 import CreateMember from "./components/member-create.component";
 import Login from "./components/login.component";
 import CreatePost from "./components/post-create.component";
-import MyPosts from "./components/post-create.component";
+import ListOfPosts from "./components/posts-list.component";
+import MyPosts from "./components/posts-list-ID.component";
 import ThisPostDetails from "./components/posts-ID-details.component";
 import ThisPostUpdate from "./components/post-edit.component";
 
 
 function LinkUserConnected(props) {
   const isLoggedIn = props.isLoggedIn;
-  let url = "/post/list/" + isLoggedIn;
+  let urlMyBlog = "/my-blog/" + isLoggedIn;
   if (isLoggedIn) {
     return     <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
@@ -29,7 +30,10 @@ function LinkUserConnected(props) {
         <Link to="/post/create" className="nav-link">Create Post</Link>
       </li>
       <li className="navbar-item">
-        <Link to={url} className="nav-link">My Posts</Link>
+        <Link to="/post/list" className="nav-link">Mini Tweets List</Link>
+      </li>
+      <li className="navbar-item">
+        <Link to={urlMyBlog} className="nav-link">My Blog</Link>
       </li>
       <li className="navbar-item">
         <Link to="/post/:id" className="nav-link">This Post Details</Link>
@@ -77,7 +81,7 @@ class App extends Component {
     return (
       <Router>
         <div className="container">
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <nav className="navbar navbar-expand-lg navbar-light bg-light">Micro-Blogos
             <a className="navbar-brand" target="_blank">
               {this.state.login}
             </a>
@@ -92,7 +96,8 @@ class App extends Component {
           <Route path="/login" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} />} />
           <Route path="/logout" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} logout={true}/>} />
           <Route path="/post/create" component={CreatePost} />
-          <Route path="/post/my-list/:id" component={MyPosts} />
+          <Route path="/post/list" component={ListOfPosts} />
+          <Route path="/my-blog/:id" component={MyPosts} />
           <Route path="/post/details/:id" component={ThisPostDetails} />
           <Route path="/post/:id/update" component={ThisPostUpdate} />
         </div>
