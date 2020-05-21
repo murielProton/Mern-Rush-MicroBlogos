@@ -24,7 +24,7 @@ function LinkUserConnected(props) {
   if (isLoggedIn) {
     return     <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
-        <Link to="/members" className="nav-link">Members List </Link>
+        <Link to="/members" className="nav-link">Volée </Link>
       </li>
       <li className="navbar-item">
         <Link to="/post/create" className="nav-link">Glatir</Link>

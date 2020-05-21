@@ -27,7 +27,7 @@ export default class MemberList extends Component {
     render() {
         return (
             <div>
-                <h3>Members List</h3>
+                <h3>Lists des Noms des Aigles de la Volée</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}

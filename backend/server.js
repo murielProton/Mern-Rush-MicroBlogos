@@ -218,13 +218,16 @@ postRoutes.route('/create').post(async function (req, res) {
         res.status(200).json({ 'errors': errors });
         return;
     }
-
     listOfRecipients = await findListOfRecipients(req);
-    console.log("Number of char in listOfRecipients ="+listOfRecipients.length)
     if (listOfRecipients.length > 0) {
         post.recipients = listOfRecipients;
     }
-
+    listOfKeyWords = findKeyWords(findWordsStartingWithHashtag(req.body.content));
+    console.log("Number of char in listOfKeyWords =" + listOfKeyWords.length)
+    if (listOfKeyWords.length > 0) {
+        post.key_words = listOfKeyWords;
+        console.log(listOfKeyWords);
+    }
     {
         post.save()
             .then(post => {
@@ -232,6 +235,7 @@ postRoutes.route('/create').post(async function (req, res) {
                 //attention les redirects ne se font pas du côté server mais du côté component !!!! reférence create-memeber.component
             })
             .catch(errors => {
+                console.log(errors);
                 res.status(200).send({ 'errors': ["Technical error"] });
             });
     }
@@ -256,8 +260,8 @@ postRoutes.route('/list/:id').post(function (req, res) {
 //http://127.0.0.1:4242/post/my-list/:login
 postRoutes.route('/my-list/:login').get(async function (req, res) {
     let login = req.params.login;
-    console.log(login +" in my list");
-    let postsList = await Post.find({author :"@"+login}).sort({ date: -1 });
+    console.log(login + " in my list");
+    let postsList = await Post.find({ author: "@" + login }).sort({ date: -1 });
     let errors = [];
     if (postsList.length == 0) {
         errors = "no posts in data base."
@@ -321,14 +325,6 @@ async function doesMyPostHaveTooManyChar(req) {
     }
     return false;
 }
-/*async function doesMyPostHaveDate(req) {
-    var curentDate = req.body.date;
-    console.log("date server ="+req.body.date)
-    if (curentDate instanceof Date) {
-        return true;
-    } 
-    return false;
-}*/
 async function generateErrorsForPostsCreate(req) {
     let errors = [];
     if (await doesMyPostHaveEnoughChar(req) == false) {
@@ -343,10 +339,6 @@ async function generateErrorsForPostsCreate(req) {
         errors.push("Your post must not be longer than 140 char.");
         console.log("Problem of @ on variable Author, see post-creator.");
     }
-    /*if (await doesMyPostHaveDate(req) == false ){
-        errors.push("Technical error.");
-        console.log("Problem with date.");
-    }*/
     return errors;
 }
 function findWordsInPosts(content) {
@@ -366,15 +358,14 @@ function findWordsStartingWithArobass(content) {
     }
     return listOfMayBeRecipient;
 }
-
-function getListOfRecipientsFromLists(potentielRecipients, members){
+function getListOfRecipientsFromLists(potentielRecipients, members) {
     const listOfRecipients = [];
     if (potentielRecipients.length > 0) {
         for (var i = 0; i < potentielRecipients.length; i++) {
             for (var y = 0; y < members.length; y++) {
-                if (potentielRecipients[i] == "@"+members[y].login) {
+                if (potentielRecipients[i] == "@" + members[y].login) {
                     listOfRecipients.push(members[y].login);
-                 }
+                }
             }
         }
     }
@@ -384,6 +375,27 @@ async function findListOfRecipients(req) {
     listOfMayBeRecipient = findWordsStartingWithArobass(req.body.content);
     listOfMembers = await Member.find();
     return getListOfRecipientsFromLists(listOfMayBeRecipient, listOfMembers);
+}
+function findWordsStartingWithHashtag(content) {
+    const listOfWords = findWordsInPosts(content);
+    const listOfMayBeKeyWords = [];
+    for (var i = 0; i < listOfWords.length; i++) {
+        if (listOfWords[i].startsWith("#")) {
+            listOfMayBeKeyWords.push(listOfWords[i]);
+        }
+    }
+    return listOfMayBeKeyWords;
+}
+function findKeyWords(array) {
+    const listOfMayBeKeyWords = array;
+    const listOfKeywords = [];
+    listOfMayBeKeyWords.forEach(element => {
+        if (element.length > 1) {
+            listOfKeywords.push(element);
+            console.log("words with more than one char : "+element)
+        }
+    });
+    return listOfKeywords;
 }
 /* FIN des FONCTIONS UTILES POSTS---------------------------------------------------------------*/
 app.listen(PORT, function () {
