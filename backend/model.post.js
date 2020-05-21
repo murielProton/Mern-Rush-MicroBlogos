@@ -14,8 +14,8 @@ let Post = new Schema({
     date:{
         type: String
     },
-    recipient:{
-        type: String
+    recipients:{
+        type: [String]
     }
 });
 

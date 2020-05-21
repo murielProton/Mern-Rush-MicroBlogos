@@ -10,7 +10,6 @@ export default class PostList extends Component {
             posts: [],
             errors: []
         };
-
     }
     componentDidMount() {
         axios.get('http://localhost:4242/post/list')
@@ -30,7 +29,7 @@ export default class PostList extends Component {
     render() {
         return (
             <div>
-                <h3>Posts List</h3>
+                <h3>Les glatits des Aigles</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
@@ -38,16 +37,14 @@ export default class PostList extends Component {
                     <thead>
                         <tr>
                             <th>Author</th>
-                            <th>Key Word</th>
                             <th>Date</th>
                             <th>Content</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.posts.map((item) =>
-                            <tr key={item.author.toString()}>
+                            <tr key={item.__ID}>
                                 <td>{item.author}</td>
-                                <td>{item.key_word}</td>
                                 <td> {item.date}</td>
                                 <td> {item.content}</td>
                             </tr>

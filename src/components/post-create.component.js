@@ -23,52 +23,41 @@ export default class CreatePost extends Component {
             post_recipient: '',
             errors: [],
             redirect: false,
-
         }
-        console.log("Error Post Create Component search 2");
     }
-
     onChangePostKeyWord(e) {
         this.setState({
             post_key_word: e.target.value
         });
-        console.log("Error Post Create Component search 3");
     }
     onChangePostContent(e) {
         this.setState({
             post_content: e.target.value
 
         });
-        console.log("Error Post Create Component search 3");
     }
     onChangePostAuthor(e) {
         this.setState({
             post_author: e.target.value
         });
-        console.log("Error Post Create Component search 4");
     }
     onChangePostDate(e) {
         this.setState({
             post_date: e.target.value
         });
-        console.log("Error Post Create Component search 5");
     }
     onChangePostRecipient(e) {
         this.setState({
             post_recipient: e.target.value
         });
-        console.log("Error Post Create Component search 6");
     }
-    onSubmit(e) {
+    onSubmit(e, findWordsStartingWithArobass) {
         e.preventDefault();
-        console.log("Error Post Create Component search 7");
         console.log("Form submitted:");
         let author = localStorage.getItem('login');
         let recipient = this.state.post_recipient;
         let date = new Date();
-        console.log("date : "+date.toLocaleString());
         console.log(`Post Content: ${this.state.post_content}`);
-
         var postToCreate = {
             key_word: "#" + this.state.post_key_word,
             content: this.state.post_content,
@@ -76,7 +65,6 @@ export default class CreatePost extends Component {
             date: date.toLocaleString(),
             recipient: "@" + recipient
         };
-
         console.log("Error Post Create Component search 8");
         console.log(postToCreate);
         axios.post('http://127.0.0.1:4242/post/create', postToCreate)
@@ -89,7 +77,7 @@ export default class CreatePost extends Component {
                         post_content: '',
                         post_author: '',
                         post_date: '',
-                        post_recipient:'',
+                        post_recipient: '',
                         redirect: true
                     });
 
@@ -112,13 +100,13 @@ export default class CreatePost extends Component {
         if (this.state.redirect) {
             console.log("Error Post Create Component search 11");
             //TODO remplacer ID par Login ex clotilde
-            return <Redirect to = "/my-blog/ID"/>
+            return <Redirect to="/post/list" />
             //return <Redirect to={urlMyBlog} />;
         }
         console.log("Error Post Create Component search 12");
         return (
             <div style={{ marginTop: 10 }}>
-                <h3>Create a Post</h3>
+                <h3>Glatir</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
@@ -137,6 +125,7 @@ export default class CreatePost extends Component {
                 </form>
             </div>
         )
-    }
+    }   
 }
 // pour avoir un endroit où taper le content facilement et carré remplacer <input> par <textarea>
+

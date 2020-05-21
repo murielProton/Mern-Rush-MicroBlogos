@@ -27,13 +27,13 @@ function LinkUserConnected(props) {
         <Link to="/members" className="nav-link">Members List </Link>
       </li>
       <li className="navbar-item">
-        <Link to="/post/create" className="nav-link">Create Post</Link>
+        <Link to="/post/create" className="nav-link">Glatir</Link>
       </li>
       <li className="navbar-item">
-        <Link to="/post/list" className="nav-link">Mini Tweets List</Link>
+        <Link to="/post/list" className="nav-link">Glatits</Link>
       </li>
       <li className="navbar-item">
-        <Link to={urlMyBlog} className="nav-link">My Blog</Link>
+        <Link to={urlMyBlog} className="nav-link">Mon Blog</Link>
       </li>
       <li className="navbar-item">
         <Link to="/post/:id" className="nav-link">This Post Details</Link>

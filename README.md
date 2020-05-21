@@ -35,6 +35,9 @@ https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage
 
 Dans les Shema/Model Mongoose pas de - mais des _. Pas de Kebab case mais du snake case.
 
+Si tu doute où mettre ton code, met le au plus près de l'arrivée du code que tu traite. Exemple si tu veux récupérer des info de la BDD, et les trier, mets toi du côté de la BDD = server.js. Si c'est l'info entré par l'utilisateur alors c'est de l'autre côté : component.js.
+Après le peut de succès que j'ai eu à placer des fonctions pour reconnaître les @ et les # côté post-create.component.js ; j'abandonne et je place ce code dans le server.js.
+
 REGEX
     [] : The char class
     ^ : Inside the char class ^ is the negator when it appears in the beginning.

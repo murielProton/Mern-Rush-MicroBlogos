@@ -217,7 +217,15 @@ postRoutes.route('/create').post(async function (req, res) {
     if (errors.length > 0) {
         res.status(200).json({ 'errors': errors });
         return;
-    } else {
+    }
+
+    listOfRecipients = await findListOfRecipients(req);
+    console.log("Number of char in listOfRecipients ="+listOfRecipients.length)
+    if (listOfRecipients.length > 0) {
+        post.recipients = listOfRecipients;
+    }
+
+    {
         post.save()
             .then(post => {
                 res.status(200).json({ 'route': '/post/create', 'status': "OK", 'post': 'post added successfully' });
@@ -230,9 +238,9 @@ postRoutes.route('/create').post(async function (req, res) {
 });
 //http://localhost:4242/post/list
 postRoutes.route('/list').get(async function (req, res) {
-    let postsList = await Post.find();
+    let postsList = await Post.find().sort({ date: -1 });
     let errors = [];
-    if (postsList.length == 0){
+    if (postsList.length == 0) {
         errors = "no posts in data base."
         errors.push("no posts in data base.");
         console.log(errors);
@@ -245,12 +253,21 @@ postRoutes.route('/list').get(async function (req, res) {
 postRoutes.route('/list/:id').post(function (req, res) {
     //res.render('create-member.component');
 });
-//http://127.0.0.1:4242/post/my-list/:id
-postRoutes.route('/my-list/:id').get(function (req, res) {
-    //res.render('create-member.component');
-});
-postRoutes.route('/my-list/:id').post(function (req, res) {
-    //res.render('create-member.component');
+//http://127.0.0.1:4242/post/my-list/:login
+postRoutes.route('/my-list/:login').get(async function (req, res) {
+    let login = req.params.login;
+    console.log(login +" in my list");
+    let postsList = await Post.find({author :"@"+login}).sort({ date: -1 });
+    let errors = [];
+    if (postsList.length == 0) {
+        errors = "no posts in data base."
+        errors.push("no posts in data base.");
+        console.log(errors);
+        res.status(200).json({ 'route': '/list', 'status': 'KO', 'errors': errors });
+        return (errors);
+    } else {
+        res.json(postsList);
+    }
 });
 //http://127.0.0.1:4242/post/details:id
 postRoutes.route('/details:id').get(function (req, res) {
@@ -292,10 +309,10 @@ async function doesMyAuthorHaveAArrobass(req) {
     var curentAuthor = req.body.author;
     if (curentAuthor !== undefined) {
         console.log("on a un curent Author.");
-    } if (curentAuthor !== undefined && curentAuthor.startsWith("@") ){
+    } if (curentAuthor !== undefined && curentAuthor.startsWith("@")) {
         return true;
     }
-return false;
+    return false;
 }
 async function doesMyPostHaveTooManyChar(req) {
     var curentContent = req.body.content;
@@ -318,11 +335,11 @@ async function generateErrorsForPostsCreate(req) {
         errors.push("Your post must at leest be 5 char long.");
         console.log("Your post must at leest be 5 char long.");
     }
-    if (await doesMyAuthorHaveAArrobass(req) == false){
+    if (await doesMyAuthorHaveAArrobass(req) == false) {
         errors.push("Technical error with your login.");
         console.log("Problem of @ on variable Author, see post-creator.");
     }
-    if (await doesMyPostHaveTooManyChar(req) == true ){
+    if (await doesMyPostHaveTooManyChar(req) == true) {
         errors.push("Your post must not be longer than 140 char.");
         console.log("Problem of @ on variable Author, see post-creator.");
     }
@@ -331,6 +348,42 @@ async function generateErrorsForPostsCreate(req) {
         console.log("Problem with date.");
     }*/
     return errors;
+}
+function findWordsInPosts(content) {
+    const listOfWords = [];
+    content.split(" ").forEach(element => {
+        listOfWords.push(element);
+    });
+    return listOfWords;
+}
+function findWordsStartingWithArobass(content) {
+    const listOfWords = findWordsInPosts(content);
+    const listOfMayBeRecipient = [];
+    for (var i = 0; i < listOfWords.length; i++) {
+        if (listOfWords[i].startsWith("@")) {
+            listOfMayBeRecipient.push(listOfWords[i]);
+        }
+    }
+    return listOfMayBeRecipient;
+}
+
+function getListOfRecipientsFromLists(potentielRecipients, members){
+    const listOfRecipients = [];
+    if (potentielRecipients.length > 0) {
+        for (var i = 0; i < potentielRecipients.length; i++) {
+            for (var y = 0; y < members.length; y++) {
+                if (potentielRecipients[i] == "@"+members[y].login) {
+                    listOfRecipients.push(members[y].login);
+                 }
+            }
+        }
+    }
+    return listOfRecipients;
+}
+async function findListOfRecipients(req) {
+    listOfMayBeRecipient = findWordsStartingWithArobass(req.body.content);
+    listOfMembers = await Member.find();
+    return getListOfRecipientsFromLists(listOfMayBeRecipient, listOfMembers);
 }
 /* FIN des FONCTIONS UTILES POSTS---------------------------------------------------------------*/
 app.listen(PORT, function () {
