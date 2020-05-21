@@ -13,9 +13,11 @@ export default class PostsList extends Component {
 
     }
     componentDidMount() {
-        axios.post('http://localhost:4242/post/list/:id')
+        let url = 'http://localhost:4242/post/my-list/'+this.props.match.params.id;
+        axios.get(url)
             .then(response => {
-                this.setState({ members: response.data });
+                console.log(response.data);
+                this.setState({ posts: response.data });
                 console.log(response.data);
             }).catch(errors => {
                 //J'attrape les erreurs
@@ -29,25 +31,21 @@ export default class PostsList extends Component {
     render() {
         return (
             <div>
-                <h3>My Blog</h3>
+                <h3>Mon Blog par {this.props.match.params.id}</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
                 <table className="table table-striped" style={{ marginTop: 20 }} >
                     <thead>
                         <tr>
-                            <th>Title</th>
                             <th>Content</th>
-                            <th>Author</th>
                             <th>Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.posts.map((item) =>
                             <tr>
-                                <td> {item.title}</td>
                                 <td> {item.content}</td>
-                                <td> {item.author}</td>
                                 <td> {item.date}</td>
                             </tr>
                         )}
