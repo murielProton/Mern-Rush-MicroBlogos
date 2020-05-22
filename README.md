@@ -64,3 +64,6 @@ testMessage.split(" ").forEach(element => {
 	});
 console.log(myListHash);
 console.log(myListPeople);
+
+Drop down menu ou menu déroulant
+https://blog.campvanilla.com/reactjs-dropdown-menus-b6e06ae3a8fe

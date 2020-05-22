@@ -269,7 +269,7 @@ postRoutes.route('/my-blog/:login').get(async function (req, res) {
         res.json(postsList);
     }
 });
-//'http://localhost:4242/post/received-list/:ID
+//http://localhost:4242/post/received-list/:ID
 postRoutes.route('/received-list/:login').get(async function (req, res) {
     let login = req.params.login;
     console.log(login + " in my list");
@@ -285,7 +285,22 @@ postRoutes.route('/received-list/:login').get(async function (req, res) {
         res.json(postsList);
     }
 });
-
+//http://localhost:4242/post/search-by-key-words
+postRoutes.route('/search-by-key-words').get(async function (req, res) {
+    let key_words = "#Clovis";
+    console.log(key_words + " in my list");
+    let postsList = await Post.find({ key_words: key_words }).sort({ date: -1 });
+    let errors = [];
+    if (postsList.length == 0) {
+        console.log("no posts in data base.");
+        errors.push("no posts in data base.");
+        console.log(errors);
+        res.status(200).json({ 'route': 'search-by-key-words', 'status': 'KO', 'errors': errors });
+        return (errors);
+    } else {
+        res.json(postsList);
+    }
+});
 app.use('/post', postRoutes);
 /* FIN des ROUTES POSTS--------------------------------------------------------------------*/
 /* DEBUT des FONCTIONS UTILES POSTS---------------------------------------------------------------*/
