@@ -102,7 +102,7 @@ class App extends Component {
           <Route path="/post/list" component={ListOfPosts} />
           <Route path="/my-blog/:id" component={MyPosts} />
           <Route path="/post/received-list/:id" component={MyMail} />
-          <Route path="/post/search-by-key-words/" component={SearchByKeyWords} />
+          <Route path="/post/search-by-key-words" component={SearchByKeyWords} />
         </div>
       </Router >
     );
