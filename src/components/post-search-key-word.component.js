@@ -24,11 +24,6 @@ export default class PostList extends Component {
                 console.log(errors);
             });
     }
-    postList() {
-        return this.state.posts.map(function (currentKey_word, i) {
-            return <PostList post={currentKey_word} key={i} />;
-        })
-    }
     render() {
         return (
             <div>

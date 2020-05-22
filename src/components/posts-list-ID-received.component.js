@@ -22,11 +22,6 @@ export default class PostsList extends Component {
                 //J'attrape les erreurs
             });
     }
-    postList() {
-        return this.state.posts.map(function (currentMember, i) {
-            return <PostsList member={currentMember} key={i} />;
-        })
-    }
     render() {
         return (
             <div>

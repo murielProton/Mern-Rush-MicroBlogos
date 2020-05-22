@@ -19,12 +19,6 @@ export default class PostList extends Component {
                 console.log(errors);
             });
     }
-    postList() {
-        return this.state.posts.map(function (currentPost, i) {
-            console.log(currentPost)
-            return <PostList post={currentPost} key={i} />;
-        })
-    }
     render() {
         return (
             <div>
