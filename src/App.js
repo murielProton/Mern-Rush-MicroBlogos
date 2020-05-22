@@ -15,12 +15,15 @@ import CreatePost from "./components/post-create.component";
 import ListOfPosts from "./components/posts-list.component";
 import MyPosts from "./components/posts-list-ID.component";
 import MyMail from "./components/posts-list-ID-received.component";
-import ThisPostUpdate from "./components/post-edit.component";
+import SearchByKeyWords from "./components/post-search-key-word.component";
 
 
 function LinkUserConnected(props) {
   const isLoggedIn = props.isLoggedIn;
+  //const keyWord = props.
   let urlMyBlog = "/my-blog/" + isLoggedIn;
+  let urlMyMail = "/post/received-list/" + isLoggedIn;
+  //let urlSearchByKeyWords = "/post/search-by-key-words/" + keyWord;
   if (isLoggedIn) {
     return     <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
@@ -36,10 +39,10 @@ function LinkUserConnected(props) {
         <Link to={urlMyBlog} className="nav-link">Mon Blog</Link>
       </li>
       <li className="navbar-item">
-        <Link to="/my-received-list/:id" className="nav-link">Mail</Link>
+        <Link to={urlMyMail} className="nav-link">Reçuts</Link>
       </li>
       <li className="navbar-item">
-        <Link to="/post/:id/update" className="nav-link">This Post Update</Link>
+        <Link to="/post/search-by-key-words/" className="nav-link">Mots Clefs</Link>
       </li>
       <li className="navbar-item">
       <Link to="/logout" className="nav-link">Logout </Link>
@@ -98,8 +101,8 @@ class App extends Component {
           <Route path="/post/create" component={CreatePost} />
           <Route path="/post/list" component={ListOfPosts} />
           <Route path="/my-blog/:id" component={MyPosts} />
-          <Route path="/my-received-list/:id" component={MyMail} />
-          <Route path="/post/:id/update" component={ThisPostUpdate} />
+          <Route path="/post/received-list/:id" component={MyMail} />
+          <Route path="/post/search-by-key-words/" component={SearchByKeyWords} />
         </div>
       </Router >
     );
