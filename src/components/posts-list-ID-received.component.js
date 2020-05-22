@@ -13,11 +13,7 @@ export default class PostsList extends Component {
 
     }
     componentDidMount() {
-        // Fournit par path="/my-blog/:id"
-        console.log(this.props.match.params.id);
-        let login = this.props.match.params.id
-        let url = 'http://localhost:4242/post/my-blog/' + login;
-        console.log(login);
+        let url = 'http://localhost:4242/post/my-received-list/'+this.props.match.params.id;
         axios.get(url)
             .then(response => {
                 console.log(response.data);
@@ -35,7 +31,7 @@ export default class PostsList extends Component {
     render() {
         return (
             <div>
-                <h3>Mon Blog par {this.props.match.params.id}</h3>
+                <h3>Ma boite de Reception{this.props.match.params.id}</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
@@ -44,6 +40,7 @@ export default class PostsList extends Component {
                         <tr>
                             <th>Content</th>
                             <th>Date</th>
+                            <th>Author</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,6 +48,7 @@ export default class PostsList extends Component {
                             <tr>
                                 <td> {item.content}</td>
                                 <td> {item.date}</td>
+                                <td> {item.author}</td>
                             </tr>
                         )}
                     </tbody>

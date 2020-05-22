@@ -14,7 +14,7 @@ import Login from "./components/login.component";
 import CreatePost from "./components/post-create.component";
 import ListOfPosts from "./components/posts-list.component";
 import MyPosts from "./components/posts-list-ID.component";
-import ThisPostDetails from "./components/posts-ID-details.component";
+import MyMail from "./components/posts-list-ID-received.component";
 import ThisPostUpdate from "./components/post-edit.component";
 
 
@@ -24,7 +24,7 @@ function LinkUserConnected(props) {
   if (isLoggedIn) {
     return     <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
-        <Link to="/members" className="nav-link">Volée </Link>
+        <Link to="/member/list" className="nav-link">Volée </Link>
       </li>
       <li className="navbar-item">
         <Link to="/post/create" className="nav-link">Glatir</Link>
@@ -36,7 +36,7 @@ function LinkUserConnected(props) {
         <Link to={urlMyBlog} className="nav-link">Mon Blog</Link>
       </li>
       <li className="navbar-item">
-        <Link to="/post/:id" className="nav-link">This Post Details</Link>
+        <Link to="/my-received-list/:id" className="nav-link">Mail</Link>
       </li>
       <li className="navbar-item">
         <Link to="/post/:id/update" className="nav-link">This Post Update</Link>
@@ -90,7 +90,7 @@ class App extends Component {
             </div>
           </nav>
           <br />
-          <Route path="/members" component={MembersList} />
+          <Route path="/member/list" component={MembersList} />
           <Route path="/editMember/:id" component={EditMember} />
           <Route path="/register" component={CreateMember} />
           <Route path="/login" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} />} />
@@ -98,7 +98,7 @@ class App extends Component {
           <Route path="/post/create" component={CreatePost} />
           <Route path="/post/list" component={ListOfPosts} />
           <Route path="/my-blog/:id" component={MyPosts} />
-          <Route path="/post/details/:id" component={ThisPostDetails} />
+          <Route path="/my-received-list/:id" component={MyMail} />
           <Route path="/post/:id/update" component={ThisPostUpdate} />
         </div>
       </Router >
