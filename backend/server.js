@@ -286,10 +286,10 @@ postRoutes.route('/received-list/:login').get(async function (req, res) {
     }
 });
 //http://localhost:4242/post/search-by-key-words
-postRoutes.route('/search-by-key-words').get(async function (req, res) {
-    let key_words = "#Clovis";
-    console.log(key_words + " in my list");
-    let postsList = await Post.find({ key_words: key_words }).sort({ date: -1 });
+postRoutes.route('/search-by-key-words/:keyword').get(async function (req, res) {
+    let keyword = req.params.keyword;
+    console.log(keyword + " in my list");
+    let postsList = await Post.find({ key_words: keyword }).sort({ date: -1 });
     let errors = [];
     if (postsList.length == 0) {
         console.log("no posts in data base.");
@@ -300,6 +300,11 @@ postRoutes.route('/search-by-key-words').get(async function (req, res) {
     } else {
         res.json(postsList);
     }
+});
+//http://localhost:4242/post/key-words-list
+postRoutes.route('/key-words-list').get(async function (req, res) {
+    let listOfKeyWords = await findAllKeyWords();
+    res.status(200).json({ 'keywords': listOfKeyWords});
 });
 app.use('/post', postRoutes);
 /* FIN des ROUTES POSTS--------------------------------------------------------------------*/
@@ -395,7 +400,8 @@ function findWordsStartingWithHashtag(content) {
     const listOfMayBeKeyWords = [];
     for (var i = 0; i < listOfWords.length; i++) {
         if (listOfWords[i].startsWith("#")) {
-            listOfMayBeKeyWords.push(listOfWords[i]);
+            // On fait un .substr(1) pour enlever le #
+            listOfMayBeKeyWords.push(listOfWords[i].substr(1));
         }
     }
     return listOfMayBeKeyWords;
@@ -410,6 +416,19 @@ function findKeyWords(array) {
         }
     });
     return listOfKeywords;
+}
+async function findAllKeyWords(){
+    //const listOkKeyWordsObject = await Post.find({},"key_words");
+    const listOkKeyWordsObject = await Post.find().select('key_words');
+    let toReturn = new Set();
+    listOkKeyWordsObject.forEach(element => {
+        element.key_words.forEach(keyword => {
+            toReturn.add(keyword);
+        });
+    });
+    console.log(toReturn);
+    console.log(Array.from(toReturn));
+    return Array.from(toReturn);
 }
 /* FIN des FONCTIONS UTILES POSTS---------------------------------------------------------------*/
 app.listen(PORT, function () {
