@@ -39,7 +39,6 @@ export default class Login extends Component {
 
         console.log("login submitted:");
         console.log("Member Login: "+ this.state.login);
-        console.log("Member Password: "+this.state.password);
         //lorsqu'un utilisateur appuye sur submit les info qu'il m'a données entrent dans member
         const member = {
             login: this.state.login,

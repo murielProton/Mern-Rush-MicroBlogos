@@ -254,32 +254,32 @@ postRoutes.route('/list').get(async function (req, res) {
         res.json(postsList);
     }
 });
+//'http://localhost:4242/post/my-blog/:ID
 postRoutes.route('/my-blog/:login').get(async function (req, res) {
     let login = req.params.login;
-    console.log(login + " in my list");
     let postsList = await Post.find({ author: "@" + login }).sort({ date: -1 });
     let errors = [];
     if (postsList.length == 0) {
         errors = "no posts in data base."
         errors.push("no posts in data base.");
         console.log(errors);
-        res.status(200).json({ 'route': '/list', 'status': 'KO', 'errors': errors });
+        res.status(200).json({ 'route': '/my-blog/:login', 'status': 'KO', 'errors': errors });
         return (errors);
     } else {
         res.json(postsList);
     }
 });
-//'http://localhost:4242/post/my-received-list/:ID
-postRoutes.route('my-received-list/:ID').get(async function (req, res) {
+//'http://localhost:4242/post/received-list/:ID
+postRoutes.route('/received-list/:login').get(async function (req, res) {
     let login = req.params.login;
     console.log(login + " in my list");
-    let postsList = await Post.find({ recipients: "@" + login }).sort({ date: -1 });
+    let postsList = await Post.find({ recipients: login }).sort({ date: -1 });
     let errors = [];
     if (postsList.length == 0) {
-        errors = "no posts in data base."
+        console.log("no posts in data base.");
         errors.push("no posts in data base.");
         console.log(errors);
-        res.status(200).json({ 'route': 'my-received-list/:ID', 'status': 'KO', 'errors': errors });
+        res.status(200).json({ 'route': 'received-list/:login', 'status': 'KO', 'errors': errors });
         return (errors);
     } else {
         res.json(postsList);

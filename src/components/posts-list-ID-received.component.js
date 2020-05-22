@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default class PostsList extends Component {
@@ -13,7 +12,7 @@ export default class PostsList extends Component {
 
     }
     componentDidMount() {
-        let url = 'http://localhost:4242/post/my-received-list/'+this.props.match.params.id;
+        let url = 'http://localhost:4242/post/received-list/'+this.props.match.params.id;
         axios.get(url)
             .then(response => {
                 console.log(response.data);
@@ -31,7 +30,7 @@ export default class PostsList extends Component {
     render() {
         return (
             <div>
-                <h3>Ma boite de Reception{this.props.match.params.id}</h3>
+                <h3>Ma boite de Reception {this.props.match.params.id}</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
