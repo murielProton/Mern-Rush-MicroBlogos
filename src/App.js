@@ -16,14 +16,13 @@ import ListOfPosts from "./components/posts-list.component";
 import MyPosts from "./components/posts-list-ID.component";
 import MyMail from "./components/posts-list-ID-received.component";
 import SearchByKeyWords from "./components/post-search-key-word.component";
-
+import KeyWordsList from "./components/post-key-words-list.component";
 
 function LinkUserConnected(props) {
   const isLoggedIn = props.isLoggedIn;
   //const keyWord = props.
   let urlMyBlog = "/my-blog/" + isLoggedIn;
   let urlMyMail = "/post/received-list/" + isLoggedIn;
-  //let urlSearchByKeyWords = "/post/search-by-key-words/" + keyWord;
   if (isLoggedIn) {
     return     <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
@@ -42,7 +41,7 @@ function LinkUserConnected(props) {
         <Link to={urlMyMail} className="nav-link">Reçuts</Link>
       </li>
       <li className="navbar-item">
-        <Link to="/post/search-by-key-words/" className="nav-link">Mots Clefs</Link>
+        <Link to="/post/key-words-list" className="nav-link">List de Mots Clefs</Link>
       </li>
       <li className="navbar-item">
       <Link to="/logout" className="nav-link">Logout </Link>
@@ -102,7 +101,8 @@ class App extends Component {
           <Route path="/post/list" component={ListOfPosts} />
           <Route path="/my-blog/:id" component={MyPosts} />
           <Route path="/post/received-list/:id" component={MyMail} />
-          <Route path="/post/search-by-key-words" component={SearchByKeyWords} />
+          <Route path="/post/search-by-key-words/:id" component={SearchByKeyWords} />
+          <Route path="/post/key-words-list" component={KeyWordsList} />
         </div>
       </Router >
     );

@@ -2,6 +2,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+
+function DisplayKeyword(props){
+    const keyword = props.keyword;
+  let urlkeyword = "/post/search-by-key-words/" + keyword;
+  return    <a href={urlkeyword} >#{keyword}</a>;
+}
+
 export default class PostsList extends Component {
     constructor(props) {
         super(props);
@@ -50,6 +57,12 @@ export default class PostsList extends Component {
                             <tr>
                                 <td> {item.content}</td>
                                 <td> {item.date}</td>
+
+                                <td>
+                                
+                                {item.key_words.map(keyword =>
+                                    <DisplayKeyword keyword={keyword} />)}
+                                 </td>
                             </tr>
                         )}
                     </tbody>
