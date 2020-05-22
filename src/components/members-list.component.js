@@ -19,11 +19,6 @@ export default class MemberList extends Component {
                 console.log(errors);
             })
     }
-    memberList() {
-        return this.state.members.map(function (currentMember, i) {
-            return <MemberList member={currentMember} key={i} />;
-        })
-    }
     render() {
         return (
             <div>
