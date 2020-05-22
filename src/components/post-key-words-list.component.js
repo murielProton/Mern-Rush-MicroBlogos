@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+//import DisplayKeyword from '../Functions.src.js';
+
+function DisplayKeyword(props){
+    const keyword = props.keyword;
+  let urlkeyword = "/post/search-by-key-words/" + keyword;
+  return    <button type="button" class="btn bg-light"><a href={urlkeyword} >#{keyword}</a></button>;
+}
 
 export default class KeyWordsList extends Component {
     constructor(props) {
@@ -13,10 +20,10 @@ export default class KeyWordsList extends Component {
         axios.get('http://localhost:4242/post/key-words-list')
             .then(response => {
                 console.log(response.data);
-                if(response.data.status ==="KO"){
+                if (response.data.status === "KO") {
                     console.log("errer on vide");
                     this.setState({ key_words: [] });
-                }else {
+                } else {
                     console.log("on est bon");
                     this.setState({ key_words: response.data.keywords });
                 }
@@ -26,7 +33,7 @@ export default class KeyWordsList extends Component {
             });
     }
     keyWordsList() {
-        
+
         return this.state.key_words.map(function (curentKeyWord, i) {
             console.log(curentKeyWord)
             return <KeyWordsList post={curentKeyWord} key={i} />;
@@ -39,20 +46,11 @@ export default class KeyWordsList extends Component {
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
-                <table className="table table-striped" style={{ marginTop: 20 }} >
-                    <thead>
-                        <tr>
-                            <th>Mot Clef</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.key_words.map((item) =>
-                            <tr key={item}>
-                                <td>{item}</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                <div className="table table-striped" style={{ marginTop: 20 }} >
+                    {this.state.key_words.map((item) =>
+                            <DisplayKeyword keyword={item}/>
+                    )}
+                </div>
             </div>
         )
     }
