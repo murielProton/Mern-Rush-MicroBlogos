@@ -16,18 +16,18 @@ export default class CreatePost extends Component {
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
-            post_key_word: '',
+            post_key_words: '',
             post_content: '',
             post_author: '',
             post_date: '',
-            post_recipient: '',
+            post_recipients: '',
             errors: [],
             redirect: false,
         }
     }
     onChangePostKeyWord(e) {
         this.setState({
-            post_key_word: e.target.value
+            post_key_words: e.target.value
         });
     }
     onChangePostContent(e) {
@@ -48,7 +48,7 @@ export default class CreatePost extends Component {
     }
     onChangePostRecipient(e) {
         this.setState({
-            post_recipient: e.target.value
+            post_recipients: e.target.value
         });
     }
     onSubmit(e, findWordsStartingWithArobass) {
@@ -59,11 +59,11 @@ export default class CreatePost extends Component {
         let date = new Date();
         console.log(`Post Content: ${this.state.post_content}`);
         var postToCreate = {
-            key_word: "#" + this.state.post_key_word,
+            key_words: "#" + this.state.post_key_word,
             content: this.state.post_content,
             author: "@" + author,
             date: date.toLocaleString(),
-            recipient: "@" + recipient
+            recipients: "@" + recipient
         };
         console.log("Error Post Create Component search 8");
         console.log(postToCreate);
@@ -73,11 +73,11 @@ export default class CreatePost extends Component {
                     console.log("Error Post Create Component search 9");
                     //console.log(author);
                     this.setState({
-                        post_key_word: '',
+                        post_key_words: '',
                         post_content: '',
                         post_author: '',
                         post_date: '',
-                        post_recipient: '',
+                        post_recipients: '',
                         redirect: true
                     });
 
@@ -94,16 +94,10 @@ export default class CreatePost extends Component {
 
             });
     }
-    //const isLoggedIn = props.isLoggedIn;
-    //let urlMyBlog = "/my-blog/" + isLoggedIn;
     render() {
         if (this.state.redirect) {
-            console.log("Error Post Create Component search 11");
-            //TODO remplacer ID par Login ex clotilde
             return <Redirect to="/post/list" />
-            //return <Redirect to={urlMyBlog} />;
         }
-        console.log("Error Post Create Component search 12");
         return (
             <div style={{ marginTop: 10 }}>
                 <h3>Glatir</h3>

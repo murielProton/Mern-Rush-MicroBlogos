@@ -254,11 +254,7 @@ postRoutes.route('/list').get(async function (req, res) {
         res.json(postsList);
     }
 });
-postRoutes.route('/list/:id').post(function (req, res) {
-    //res.render('create-member.component');
-});
-//http://127.0.0.1:4242/post/my-list/:login
-postRoutes.route('/my-list/:login').get(async function (req, res) {
+postRoutes.route('/my-blog/:login').get(async function (req, res) {
     let login = req.params.login;
     console.log(login + " in my list");
     let postsList = await Post.find({ author: "@" + login }).sort({ date: -1 });
@@ -273,20 +269,23 @@ postRoutes.route('/my-list/:login').get(async function (req, res) {
         res.json(postsList);
     }
 });
-//http://127.0.0.1:4242/post/details:id
-postRoutes.route('/details:id').get(function (req, res) {
-    //res.render('create-member.component');
+//'http://localhost:4242/post/my-received-list/:ID
+postRoutes.route('my-received-list/:ID').get(async function (req, res) {
+    let login = req.params.login;
+    console.log(login + " in my list");
+    let postsList = await Post.find({ recipients: "@" + login }).sort({ date: -1 });
+    let errors = [];
+    if (postsList.length == 0) {
+        errors = "no posts in data base."
+        errors.push("no posts in data base.");
+        console.log(errors);
+        res.status(200).json({ 'route': 'my-received-list/:ID', 'status': 'KO', 'errors': errors });
+        return (errors);
+    } else {
+        res.json(postsList);
+    }
 });
-postRoutes.route('/:id').post(function (req, res) {
-    //res.render('create-member.component');
-});
-//http://127.0.0.1:4242/post/:id/update
-postRoutes.route('/:id/update').get(function (req, res) {
-    //res.render('create-member.component');
-});
-postRoutes.route(':id/update').post(function (req, res) {
-    //res.render('create-member.component');
-});
+
 app.use('/post', postRoutes);
 /* FIN des ROUTES POSTS--------------------------------------------------------------------*/
 /* DEBUT des FONCTIONS UTILES POSTS---------------------------------------------------------------*/
