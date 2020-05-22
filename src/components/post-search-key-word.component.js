@@ -27,7 +27,7 @@ export default class PostList extends Component {
     render() {
         return (
             <div>
-                <h3>List of Posts with the same #key_words</h3>
+                <h3>List of Posts with the #key_word : {this.props.match.params.id}</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
