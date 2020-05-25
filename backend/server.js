@@ -54,6 +54,7 @@ memberRoutes.route('/register').post(async function (req, res) {
             });
     }
 });
+//http://127.0.0.1:4242/member/login
 memberRoutes.route('/login').get(function (req, res) {
     res.status(200).json({});
 });
@@ -88,23 +89,35 @@ memberRoutes.route('/login').post(async function (req, res) {
         }
     }
 });
-memberRoutes.route('/update/:id').post(function (req, res) {
-    Member.findById(req.params.id, function (err, member) {
-        if (!member) {
-            res.status(404).send(member + " is not found");
-            //res.render('edit-member.component');
+//http://127.0.0.1:4242/update/:login
+memberRoutes.route('/update/:login').get(function (req, res) {
+    Member.find({ login: req.params.login }, function (errors, members) {
+        if (members.length > 0) {
+            res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'member': members[0] });
         } else {
-            member.member_email = req.body.member_email;
-            member.save().then(member => {
-                res.json('Your email has been updated!');
-                //res.render('edit-member.component');
-            })
-                .catch(err => {
-                    res.status(400).send("Update not possible");
-                    //res.render('edit-member.component');
-                });
+            errors.push("No members with this login in data base.");
+            res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'member': {} });
         }
     });
+});
+memberRoutes.route('/update/:login').post(async function (req, res) {
+    let member = Member.find({ login: req.body.login });
+        let errors = await generateErrorsForUpdate(req, member);
+        if (errors.length > 0) {
+            res.status(200).json({ 'route': '/update/:login', 'errors': errors })
+            return;
+        } else {
+            console.log("j'enregistre");/*
+            member.password = toSha1(member.password);
+            member.save()
+                .then(member => {
+                    res.status(200).json({ 'route': '/update/:login', 'status': "OK", 'member': 'member added successfully' });
+                    //attention les redirects ne se font pas du côté server mais du côté component !!!! reférence create-memeber.component
+                })
+                .catch(err => {
+                    res.status(200).send({ 'route': '/update/:login', 'errors': ["Technical error"] });
+                });*/
+        }
 });
 memberRoutes.route('/list').get(async function (req, res) {
     let membersList = await Member.find();
@@ -137,6 +150,22 @@ function isCurentOftheRightLength(req) {
         return false;
     } else {
         return true;
+    }
+}
+async function isNewLoginSameAsOldLogin(req) {
+    let loginListMember = await Member.find({ login: req.body.login });
+    if (loginListMember.length == 1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+async function isNewEmailSameAsOldEmail(req) {
+    let emailListMember = await Member.find({ email: req.body.email });
+    if (emailListMember.length == 1) {
+        return true;
+    } else {
+        return false;
     }
 }
 //login unique in collection
@@ -204,6 +233,48 @@ function toSha1(password) {
     // hex => Format de retour hex 012345679abcdef (base 16)
     return shasum.digest('hex');
 }
+async function generateErrorsForUpdate(req, member) {
+    let errors =[];
+    let login = req.body.login;
+    console.log(login);
+    if (isCurentOftheRightLength(req) == false) {
+        errors.push("your login takes more than 5 character and less than 20.");
+        console.log(errors);
+    }
+    if (await isNewLoginSameAsOldLogin(req)) {
+        errors.push("Not an Update !");
+        console.log(errors);
+    }
+    if (await isLoginUniqueInCollection(req)==false){
+        errors.push("Your login is already in data base, please enter an other.");
+        console.log(errors);
+        console.log(req.body.login);
+    }
+    if (await isNewEmailSameAsOldEmail(req)){
+        errors.push("Not an Update !");
+        console.log(errors);
+    }
+    if (await isEmailUniqueInCollection(req) == false) {
+        errors.push("Your email is already in data base, please enter an other.")
+        console.log(errors);
+    }
+    if (await isEmailValid(req) == false) {
+        errors.push("This email : " + req.body.email + ", is not valid.");
+        console.log(errors);
+    }
+    if (member.password == toSha1(req.body.password)) {
+        console.log("You are now connected as " + req.body.login);
+        // ATTENTION LES REDIRECTS ROOTS SONT DU COTE COMPONENT
+        res.status(200).json({ 'route': '/post/create', 'status': 'OK', 'member': req.body.login + ' connected successfully' });
+    } else {
+        console.log("Failliure in connection or Incorrect Password");
+        errors.push("Failliure in connection or Incorrect Password or Login");
+        res.status(200).json({ 'route': '/login', 'status': 'KO', 'errors': errors });
+        throw errors;
+    }
+    return errors;
+}
+
 /* FIN des FONCTIONS UTILES MEMBERS--------------------------------------------------------------------*/
 /* DEBUT des ROUTES POSTS--------------------------------------------------------------------*/
 //http://127.0.0.1:4242/post/create
@@ -304,7 +375,7 @@ postRoutes.route('/search-by-key-words/:keyword').get(async function (req, res) 
 //http://localhost:4242/post/key-words-list
 postRoutes.route('/key-words-list').get(async function (req, res) {
     let listOfKeyWords = await findAllKeyWords();
-    res.status(200).json({ 'keywords': listOfKeyWords});
+    res.status(200).json({ 'keywords': listOfKeyWords });
 });
 app.use('/post', postRoutes);
 /* FIN des ROUTES POSTS--------------------------------------------------------------------*/
@@ -412,12 +483,12 @@ function findKeyWords(array) {
     listOfMayBeKeyWords.forEach(element => {
         if (element.length > 1) {
             listOfKeywords.push(element);
-            console.log("words with more than one char : "+element)
+            console.log("words with more than one char : " + element)
         }
     });
     return listOfKeywords;
 }
-async function findAllKeyWords(){
+async function findAllKeyWords() {
     //const listOkKeyWordsObject = await Post.find({},"key_words");
     const listOkKeyWordsObject = await Post.find().select('key_words');
     let toReturn = new Set();

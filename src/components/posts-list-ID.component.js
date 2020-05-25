@@ -17,7 +17,7 @@ export default class PostsList extends Component {
         // Fournit par path="/my-blog/:id"
         console.log(this.props.match.params.id);
         let login = this.props.match.params.id
-        let url = 'http://localhost:4242/post/my-blog/' + login;
+        let url = 'http://localhost:4242/member/update/' + login;
         console.log(login);
         axios.get(url)
             .then(response => {
@@ -27,11 +27,6 @@ export default class PostsList extends Component {
             }).catch(errors => {
                 //J'attrape les erreurs
             });
-    }
-    postList() {
-        return this.state.posts.map(function (currentMember, i) {
-            return <PostsList member={currentMember} key={i} />;
-        })
     }
     render() {
         return (

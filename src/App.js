@@ -23,10 +23,14 @@ function LinkUserConnected(props) {
   //const keyWord = props.
   let urlMyBlog = "/my-blog/" + isLoggedIn;
   let urlMyMail = "/post/received-list/" + isLoggedIn;
+  let urlUpdateProfile = "/member/update/" + isLoggedIn;
   if (isLoggedIn) {
     return     <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
-        <Link to="/member/list" className="nav-link">Volée </Link>
+        <Link to={urlUpdateProfile} className="nav-link">Profile update</Link>
+      </li>
+      <li className="navbar-item">
+        <Link to="/member/list" className="nav-link">Volée</Link>
       </li>
       <li className="navbar-item">
         <Link to="/post/create" className="nav-link">Glatir</Link>
@@ -93,7 +97,7 @@ class App extends Component {
           </nav>
           <br />
           <Route path="/member/list" component={MembersList} />
-          <Route path="/editMember/:id" component={EditMember} />
+          <Route path="/member/update/:id" component={EditMember} />
           <Route path="/register" component={CreateMember} />
           <Route path="/login" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} />} />
           <Route path="/logout" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} logout={true}/>} />
