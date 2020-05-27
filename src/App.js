@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import MembersList from "./components/members-list.component";
 import EditMember from "./components/member-edit.component";
 import CreateMember from "./components/member-create.component";
+import SeeMyProfile from "./components/member-profile-ID.component";
 import Login from "./components/login.component";
 import CreatePost from "./components/post-create.component";
 import ListOfPosts from "./components/posts-list.component";
@@ -23,20 +24,24 @@ function LinkUserConnected(props) {
   //const keyWord = props.
   let urlMyBlog = "/my-blog/" + isLoggedIn;
   let urlMyMail = "/post/received-list/" + isLoggedIn;
+  let urlMyProfile = "/member/profile/" + isLoggedIn;
   let urlUpdateProfile = "/member/update/" + isLoggedIn;
   if (isLoggedIn) {
     return     <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
+        <Link to="/member/list" className="nav-link">Liste des Membres</Link>
+      </li>
+      <li className="navbar-item">
+        <Link to="/post/create" className="nav-link">Chanter</Link>
+      </li>
+      <li className="navbar-item">
+        <Link to="/post/list" className="nav-link">Chants</Link>
+      </li>
+      <li className="navbar-item">
+        <Link to={urlMyProfile} className="nav-link">Voir Mon Profil</Link>
+      </li>
+      <li className="navbar-item">
         <Link to={urlUpdateProfile} className="nav-link">Profile update</Link>
-      </li>
-      <li className="navbar-item">
-        <Link to="/member/list" className="nav-link">Volée</Link>
-      </li>
-      <li className="navbar-item">
-        <Link to="/post/create" className="nav-link">Glatir</Link>
-      </li>
-      <li className="navbar-item">
-        <Link to="/post/list" className="nav-link">Glatits</Link>
       </li>
       <li className="navbar-item">
         <Link to={urlMyBlog} className="nav-link">Mon Blog</Link>
@@ -98,6 +103,7 @@ class App extends Component {
           <br />
           <Route path="/member/list" component={MembersList} />
           <Route path="/member/update/:id" component={EditMember} />
+          <Route path="/member/profile/:id" component={SeeMyProfile} />
           <Route path="/register" component={CreateMember} />
           <Route path="/login" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} />} />
           <Route path="/logout" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} logout={true}/>} />
