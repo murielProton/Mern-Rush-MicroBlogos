@@ -115,44 +115,45 @@ export default class UpdateMember extends Component {
             });
     }
     render() {
-        if (this.state.redirect) {
-            return <Redirect to="/my-blog/:login" />;
-        }
-        return (
-            <div style={{ marginTop: 10 }}>
-                <h3>Update Profile  {this.props.match.params.id}</h3>
-                {this.state.errors.map((item) =>
-                    <h4>{item}</h4>
-                )}
-                <div>
-                    Your Login : {this.state.member_login}
-                </div>
-                <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                        <label>Change your Email: </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={this.state.member_email}
-                            onChange={this.onChangeMemberEmail}
-                        />
-                    </div>
+        /*if (this.state.redirect) {
+            return <Redirect to="/member/profile/login" />;
+        } else {*/
+            return (
+                <div style={{ marginTop: 10 }}>
+                    <h3>Update Profile  {this.props.match.params.id}</h3>
+                    {this.state.errors.map((item) =>
+                        <h4>{item}</h4>
+                    )}
                     <div>
-                        Please do confirm your identity by entering your password.
+                        Your Login : {this.state.member_login}
                     </div>
-                    <div className="form-group">
-                        <label>Password : </label>
-                        <input type="password"
-                            className="form-control"
-                            value={this.state.member_password}
-                            onChange={this.onChangeMemberPassword}
-                        />
+                    <form onSubmit={this.onSubmit}>
+                        <div className="form-group">
+                            <label>Change your Email: </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={this.state.member_email}
+                                onChange={this.onChangeMemberEmail}
+                            />
+                        </div>
+                        <div>
+                            Please do confirm your identity by entering your password.
                     </div>
-                    <div className="form-group">
-                        <input type="submit" value="update" className="btn btn-light" />
-                    </div>
-                </form>
-            </div>
-        )
+                        <div className="form-group">
+                            <label>Password : </label>
+                            <input type="password"
+                                className="form-control"
+                                value={this.state.member_password}
+                                onChange={this.onChangeMemberPassword}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <input type="submit" value="update" className="btn btn-light" />
+                        </div>
+                    </form>
+                </div>
+            )
+        //}
     }
 }
