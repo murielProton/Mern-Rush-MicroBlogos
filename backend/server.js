@@ -110,30 +110,37 @@ memberRoutes.route('/profile/:login').post(function (req, res) {
         }
     });
 });
-//http://127.0.0.1:4242/update/:login
-memberRoutes.route('/update/:login').get(function (req, res) {
-    Member.find({ login: req.params.login }, function (errors, members) {
-        if (members.length > 0) {
-            res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'member': members[0] });
-        } else {
-            errors.push("No members with this login in data base.");
-            res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'member': {} });
-        }
-    });
+//http://127.0.0.1:4242/member/update/:login
+memberRoutes.route('/update/:login').get(async function (req, res) {  
+    let membersList = await Member.find({ login: req.params.login });
+    let errors = [];
+    if (membersList.length > 0) {
+        res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'member': membersList[0] });
+    } else {
+        errors.push("No members with this login in data base.");
+        res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'member': {} });
+    }
 });
 memberRoutes.route('/update/:id').post(async function (req, res) {
     let errors = [];
     console.log("errors =" + errors);
     console.log(req.body);
     let login = req.body.login;
-    console.log( "post update Login = "+login);
+    console.log("post update Login = " + login);
     let email = req.body.email;
-    console.log( "post update email = "+email);
-    const filterLogin = {login : login};
-    const emailToUpdate = {email : email};
-    const doc = await Member.findOneAndUpdate(filterLogin, emailToUpdate);
-    console.log(doc);
-
+    console.log("post update email = " + email);
+    const filterLogin = { login: login };
+    let membersList = await Member.find({ login: req.body.login });
+    if (filterLogin == undefined || filterLogin == null) {
+        errors.push("data is not found");
+        console.log("errors =" + errors);
+        res.status(200).json({ 'route': '/update/:id', 'errors': errors });
+    } else {
+        const emailToUpdate = { email: email };
+        const doc = await Member.findOneAndUpdate(filterLogin, emailToUpdate);
+        console.log(doc);
+        res.status(200).json({ 'route': '/profile/:login', 'errors': errors, 'status': 'OK', 'member': "member updated successfully" })
+    }
     /*Member.findOneAndUpdate(req.params.login, function (err) {
         let member = membersList[0];
         console.log("member =" + member);
