@@ -15,8 +15,14 @@ export default class PostsList extends Component {
         let url = 'http://localhost:4242/post/received-list/'+this.props.match.params.id;
         axios.get(url)
             .then(response => {
+                if(response.data.status =="KO"){
+                    this.setState({ posts: [] });
+                } else {
+                    this.setState({ posts: response.data });
+                }
                 console.log(response.data);
-                this.setState({ posts: response.data });
+
+                
                 console.log(response.data);
             }).catch(errors => {
                 //J'attrape les erreurs

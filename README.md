@@ -67,3 +67,5 @@ console.log(myListPeople);
 
 Drop down menu ou menu déroulant
 https://blog.campvanilla.com/reactjs-dropdown-menus-b6e06ae3a8fe
+
+Dans un fichier .component.js, si j'affiche une liste. Pour me prémunir contre les erreur de liste undefined parce qu'elle n'a rien dedans, faire un if en début de render qui set la liste à vide.

@@ -89,6 +89,27 @@ memberRoutes.route('/login').post(async function (req, res) {
         }
     }
 });
+//http://127.0.0.1:4242/member/profile/:login
+memberRoutes.route('/profile/:login').get(function (req, res) {
+    Member.find({ login: req.params.login }, function (errors, members) {
+        if (members.length > 0) {
+            res.status(200).json({ 'route': '/profile/:login', 'errors': errors, 'member': members[0] });
+        } else {
+            errors.push("No members with this login in data base.");
+            res.status(200).json({ 'route': '/profile/:login', 'errors': errors, 'member': {} });
+        }
+    });
+});
+memberRoutes.route('/profile/:login').post(function (req, res) {
+    Member.find({ login: req.params.login }, function (errors, members) {
+        if (members.length > 0) {
+            res.status(200).json({ 'route': '/profile/:login', 'errors': errors, 'member': members[0] });
+        } else {
+            errors.push("No members with this login in data base.");
+            res.status(200).json({ 'route': '/profile/:login', 'errors': errors, 'member': {} });
+        }
+    });
+});
 //http://127.0.0.1:4242/update/:login
 memberRoutes.route('/update/:login').get(function (req, res) {
     Member.find({ login: req.params.login }, function (errors, members) {
@@ -101,14 +122,36 @@ memberRoutes.route('/update/:login').get(function (req, res) {
     });
 });
 memberRoutes.route('/update/:login').post(async function (req, res) {
-    let member = Member.find({ login: req.body.login });
-        let errors = await generateErrorsForUpdate(req, member);
-        if (errors.length > 0) {
-            res.status(200).json({ 'route': '/update/:login', 'errors': errors })
-            return;
-        } else {
-            console.log("j'enregistre");/*
-            member.password = toSha1(member.password);
+    let membersList = await Member.find({ login: req.body.login });
+    let errors = [];
+    let member = membersList[0];
+    console.log(membersList);
+    if (membersList.length == 0) {
+        console.log("Incorrect Login");
+        errors.push("Failliure in connection or Incorrect Password or Login");
+        res.status(200).json({ 'route': '/login', 'status': "KO", 'errors': errors });
+    } else {
+        
+        console.log(member);
+        errors = await generateErrorsForUpdate(req, member);
+    }
+    //Arret de la stack ici
+    if (errors.length > 0) {
+        res.status(200).json({ 'route': '/update/:login', 'errors': errors })
+        return;
+    } else {
+        console.log("j'enregistre");
+        member._id
+        //members.update({ _id: member._id }, { $set: { email: req.body.password } });
+        member.save()
+            .then(member => {
+                res.status(200).json({ 'route': '/login', 'status': "OK", 'member': 'member updated successfully' });
+                //attention les redirects ne se font pas du côté server mais du côté component !!!! reférence create-memeber.component
+            })
+            .catch(err => {
+                res.status(200).send({ 'errors': ["Technical error"] });
+            });
+            /*
             member.save()
                 .then(member => {
                     res.status(200).json({ 'route': '/update/:login', 'status': "OK", 'member': 'member added successfully' });
@@ -117,7 +160,7 @@ memberRoutes.route('/update/:login').post(async function (req, res) {
                 .catch(err => {
                     res.status(200).send({ 'route': '/update/:login', 'errors': ["Technical error"] });
                 });*/
-        }
+    }
 });
 memberRoutes.route('/list').get(async function (req, res) {
     let membersList = await Member.find();
@@ -233,24 +276,27 @@ function toSha1(password) {
     // hex => Format de retour hex 012345679abcdef (base 16)
     return shasum.digest('hex');
 }
+async function passwordVerification(req, member) {
+    //vérifier si les deux mots de passe hacher sont identiques
+    if (member.password == toSha1(req.body.password)) {
+        return true
+    } else {
+        return false;
+    }
+}
+//TODO Make it true n'importe quel champ doit pouvoir être testé
+async function isFormFieldCompleted(req) {
+    if (req.body.password == undefined || req.body.password == null) {
+        return false;
+    } else {
+        return true;
+    }
+}
 async function generateErrorsForUpdate(req, member) {
-    let errors =[];
+    let errors = [];
     let login = req.body.login;
     console.log(login);
-    if (isCurentOftheRightLength(req) == false) {
-        errors.push("your login takes more than 5 character and less than 20.");
-        console.log(errors);
-    }
-    if (await isNewLoginSameAsOldLogin(req)) {
-        errors.push("Not an Update !");
-        console.log(errors);
-    }
-    if (await isLoginUniqueInCollection(req)==false){
-        errors.push("Your login is already in data base, please enter an other.");
-        console.log(errors);
-        console.log(req.body.login);
-    }
-    if (await isNewEmailSameAsOldEmail(req)){
+    if (await isNewEmailSameAsOldEmail(req)) {
         errors.push("Not an Update !");
         console.log(errors);
     }
@@ -262,15 +308,13 @@ async function generateErrorsForUpdate(req, member) {
         errors.push("This email : " + req.body.email + ", is not valid.");
         console.log(errors);
     }
-    if (member.password == toSha1(req.body.password)) {
-        console.log("You are now connected as " + req.body.login);
-        // ATTENTION LES REDIRECTS ROOTS SONT DU COTE COMPONENT
-        res.status(200).json({ 'route': '/post/create', 'status': 'OK', 'member': req.body.login + ' connected successfully' });
-    } else {
-        console.log("Failliure in connection or Incorrect Password");
-        errors.push("Failliure in connection or Incorrect Password or Login");
-        res.status(200).json({ 'route': '/login', 'status': 'KO', 'errors': errors });
-        throw errors;
+    if (isFormFieldCompleted(req) == false) {
+        error.push("please enter your password.");
+        console.log(errors);
+    }
+    if (await passwordVerification(req, member) == false) {
+        errors.push("Incorrect password.");
+        console.log(errors);
     }
     return errors;
 }

@@ -10,9 +10,7 @@ export default class UpdateMember extends Component {
         this.onChangeMemberLogin = this.onChangeMemberLogin.bind(this);
         this.onChangeMemberEmail = this.onChangeMemberEmail.bind(this);
         this.onChangeMemberPassword = this.onChangeMemberPassword.bind(this);
-        this.onChangeMemberNewPassword = this.onChangeMemberNewPassword.bind(this);
         this.onChangeMemberAdmin = this.onChangeMemberAdmin.bind(this);
-        this.onChangeMemberNewConfirmationPassword = this.onChangeMemberNewConfirmationPassword.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
@@ -28,9 +26,7 @@ export default class UpdateMember extends Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.match.params.id);
         let login = this.props.match.params.id;
-        console.log(this.props.match.params.id);
         this.setState({
             member_login: login
         });
@@ -42,20 +38,19 @@ export default class UpdateMember extends Component {
                 console.log(response.data.member);
                 let member = response.data.member;
                 console.log(member);
-                console.log( member.email);
+                console.log(member.email);
                 this.setState({
                     member_id: member._id,
                     member_login: member.login,
                     member_email: member.email,
-                    member_old_password: '',
-                    member_new_password: '',
-                    member_new_password_confirmation: '',
+                    member_password: response.data.password,
                     member_admin: member.admin,
                     redirect: false
                 });
             }).catch(errors => {
                 //c'est comme cela que j'attrappe mes erreurs
-            }); console.log(this.state.login);
+                console.log(this.state.login);
+            });
     }
     onChangeMemberLogin(e) {
         this.setState({
@@ -73,22 +68,11 @@ export default class UpdateMember extends Component {
             member_password: e.target.value
         });
     }
-    onChangeMemberNewPassword(e) {
-        this.setState({
-            member_new_password: e.target.value
-        });
-    }
-    onChangeMemberNewConfirmationPassword(e) {
-        this.setState({
-            member_new_password_confirmation: e.target.value
-        });
-    }
     onChangeMemberAdmin(e) {
         this.setState({
             member_admin: e.target.value
         });
     }
-
     onSubmit(e) {
         e.preventDefault();
         console.log("Form submitted:");
@@ -97,11 +81,7 @@ export default class UpdateMember extends Component {
         console.log(`Member Password: ${this.state.member_password}`);
         console.log(`Member Admin: ${this.state.member_admin}`)
         var changesToMember = {
-            login: this.state.member_login,
-            email: this.state.member_email,
-            password: this.state.member_password,
-            password_confirmation: this.state.member_password_confirmation,
-            admin: this.state.member_admin
+            password: this.state.member_password
         };
         // On utilise lelogin de l'url et pas la version modifié.
         let login = this.props.match.params.id;
@@ -109,13 +89,31 @@ export default class UpdateMember extends Component {
         let url = 'http://127.0.0.1:4242/member/update/' + login;
         console.log(changesToMember);
         axios.post(url, changesToMember)
-            .then(response => console.log(response.data));
-        this.props.history.push('/');
+            .then(res => {
+                if (res.data.member === 'member updated successfully') {
+                    console.log(changesToMember.login);
+                    this.setState({
+                        member_login: '',
+                        member_email: '',
+                        member_password: '',
+                        member_password_confirmation: '',
+                        member_admin: false,
+                        redirect: true
+                    });
+                } else {
+                    this.setState({
+                        errors: res.data.errors
+                    });
+                    console.log(res.data.errors);
+                }
+            }).catch(errors => {
+                //c'est comme cela que j'attrappe mes erreurs
+                console.log(errors);
+            });
     }
-
     render() {
         if (this.state.redirect) {
-            return <Redirect to="/member/list"/>;
+            return <Redirect to="/my-blog/:login" />;
         }
         return (
             <div style={{ marginTop: 10 }}>
@@ -123,15 +121,10 @@ export default class UpdateMember extends Component {
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
+                <div>
+                    Your Login : {this.state.member_login}
+                </div>
                 <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                        <label>Change your Login : </label>
-                        <input type="text"
-                            className="form-control"
-                            value={this.state.member_login}
-                            onChange={this.onChangeMemberLogin}
-                        />
-                    </div>
                     <div className="form-group">
                         <label>Change your Email: </label>
                         <input
@@ -141,28 +134,15 @@ export default class UpdateMember extends Component {
                             onChange={this.onChangeMemberEmail}
                         />
                     </div>
+                    <div>
+                        Please do confirm your identity by entering your password.
+                    </div>
                     <div className="form-group">
-                        <label>Old Password : </label>
+                        <label>Password : </label>
                         <input type="password"
                             className="form-control"
                             value={this.state.member_password}
                             onChange={this.onChangeMemberPassword}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>New Password : </label>
-                        <input type="password"
-                            className="form-control"
-                            value={this.state.member_new_password}
-                            onChange={this.onChangeMemberNewPassword}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>New Password Confirmation: </label>
-                        <input type="password"
-                            className="form-control"
-                            value={this.state.member_new_password_confirmation}
-                            onChange={this.onChangeMemberNewConfirmationPassword}
                         />
                     </div>
                     <div className="form-group">

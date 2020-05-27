@@ -17,7 +17,7 @@ export default class PostsList extends Component {
         // Fournit par path="/my-blog/:id"
         console.log(this.props.match.params.id);
         let login = this.props.match.params.id
-        let url = 'http://localhost:4242/member/update/' + login;
+        let url = 'http://localhost:4242/post/my-blog/' + login;
         console.log(login);
         axios.get(url)
             .then(response => {
