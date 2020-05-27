@@ -74,3 +74,5 @@ req.params.**option of the field** => pour récupérer de la bd
 req.body.**option of the field** => pour récupérer du formulaire
 
 DELETE https://kb.objectrocket.com/mongo-db/mongoose-deleteone-922
+
+CRUD The MERN Stack Tutorial — Building A React CRUD Application From Start To Finish — Part 2
