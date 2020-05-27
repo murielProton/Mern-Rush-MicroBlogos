@@ -111,7 +111,7 @@ memberRoutes.route('/profile/:login').post(function (req, res) {
     });
 });
 //http://127.0.0.1:4242/member/update/:login
-memberRoutes.route('/update/:login').get(async function (req, res) {  
+memberRoutes.route('/update/:login').get(async function (req, res) {
     let membersList = await Member.find({ login: req.params.login });
     let errors = [];
     if (membersList.length > 0) {
@@ -121,8 +121,14 @@ memberRoutes.route('/update/:login').get(async function (req, res) {
         res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'member': {} });
     }
 });
-memberRoutes.route('/update/:id').post(async function (req, res) {
-    let errors = [];
+memberRoutes.route('/update/:login').post(async function (req, res) {
+    console.log("je suis dans update post");
+    console.log(req.params.login);
+    let membersList = await Member.find({ login: req.params.login });
+    console.log(membersList);
+    let member = membersList[0];
+    console.log("update member " + member);
+    let errors = await generateErrorsForUpdate(req, member);
     console.log("errors =" + errors);
     console.log(req.body);
     let login = req.body.login;
@@ -130,37 +136,28 @@ memberRoutes.route('/update/:id').post(async function (req, res) {
     let email = req.body.email;
     console.log("post update email = " + email);
     const filterLogin = { login: login };
-    let membersList = await Member.find({ login: req.body.login });
     if (filterLogin == undefined || filterLogin == null) {
         errors.push("data is not found");
         console.log("errors =" + errors);
         res.status(200).json({ 'route': '/update/:id', 'errors': errors });
+        return;
+    }
+    if (errors.length > 0) {
+        res.status(200).json({ 'errors': errors })
+        console.log(errors);
+        return;
     } else {
         const emailToUpdate = { email: email };
-        const doc = await Member.findOneAndUpdate(filterLogin, emailToUpdate);
-        console.log(doc);
-        res.status(200).json({ 'route': '/profile/:login', 'errors': errors, 'status': 'OK', 'member': "member updated successfully" })
-    }
-    /*Member.findOneAndUpdate(req.params.login, function (err) {
-        let member = membersList[0];
-        console.log("member =" + member);
-        //member est vide
-        if (!member) {
-            errors.push("data is not found");
-            console.log("errors =" + errors);
-            res.status(200).json({ 'route': '/profile/:login', 'errors': errors, 'member': membersList[0] });
-        } else {
-            member.member_email = req.body.member_email;
-            member.save().then(member => {
-                res.status(200).json({ 'route': '/update/:login', 'status': "OK", 'member': 'member updated successfully' });
+        const doc = await Member.findOneAndUpdate(filterLogin, emailToUpdate, { $set: { useFindAndModify: false } });
+        doc.save().then(member => {
+            res.status(200).json({ 'route': '/profile/:login', 'status': "OK", 'member': 'member updated successfully' });
+        })
+            .catch(err => {
+                errors.push("Update not possible");
+                res.status(200).json({ 'route': '/update/:login', 'status': 'KO', 'errors': errors });
             })
-                .catch(err => {
-                    errors.push("Update not possible");
-                    res.status(200).json({ 'route': '/update/:login', 'status': 'KO', 'errors': errors });
-                })
-            console.log("errors =" + errors);
-        }
-    });*/
+        console.log("errors =" + errors);
+    }
 });
 memberRoutes.route('/list').get(async function (req, res) {
     let membersList = await Member.find();
@@ -276,9 +273,9 @@ function toSha1(password) {
     // hex => Format de retour hex 012345679abcdef (base 16)
     return shasum.digest('hex');
 }
-async function passwordVerification(req, member) {
+async function passwordVerification(encryptedPassword, planPassword) {
     //vérifier si les deux mots de passe hacher sont identiques
-    if (member.password == toSha1(req.body.password)) {
+    if (encryptedPassword == toSha1(planPassword)) {
         return true
     } else {
         return false;
@@ -312,7 +309,7 @@ async function generateErrorsForUpdate(req, member) {
         error.push("please enter your password.");
         console.log(errors);
     }
-    if (await passwordVerification(req, member) == false) {
+    if (await passwordVerification(member.password, req.body.password) == false) {
         errors.push("Incorrect password.");
         console.log(errors);
     }

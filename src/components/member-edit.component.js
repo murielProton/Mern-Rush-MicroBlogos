@@ -18,8 +18,6 @@ export default class UpdateMember extends Component {
             member_login: '',
             member_email: '',
             member_password: '',
-            member_new_password: '',
-            member_new_password_confirmation: '',
             member_admin: false,
             redirect: false,
             errors: []
@@ -39,6 +37,7 @@ export default class UpdateMember extends Component {
                 let member = response.data.member;
                 console.log(member);
                 console.log(member.email);
+                console.log("component pwd" + response.date.password);
                 this.setState({
                     member_id: member._id,
                     member_login: member.login,
@@ -51,6 +50,7 @@ export default class UpdateMember extends Component {
                 //c'est comme cela que j'attrappe mes erreurs
                 console.log(this.state.login);
             });
+            
     }
     onChangeMemberLogin(e) {
         this.setState({
@@ -86,6 +86,7 @@ export default class UpdateMember extends Component {
             email: this.state.member_email,
             password: this.state.member_password
         };
+        console.log("on submit "+ this.state.member_password );
         // On utilise lelogin de l'url et pas la version modifié.
         let login = this.props.match.params.id;
         // set member => info via POST méthode
@@ -115,8 +116,10 @@ export default class UpdateMember extends Component {
             });
     }
     render() {
-        /*if (this.state.redirect) {
-            return <Redirect to="/member/profile/login" />;
+        /*TODO redirection vers le profile quand cela est réussit
+        if (this.state.redirect) {
+            var redirectLogin = this.state.login;
+            return <Redirect to={`/member/profile/${redirectLogin}`}/>;
         } else {*/
             return (
                 <div style={{ marginTop: 10 }}>
@@ -154,6 +157,6 @@ export default class UpdateMember extends Component {
                     </form>
                 </div>
             )
-        //}
+       // }
     }
 }
