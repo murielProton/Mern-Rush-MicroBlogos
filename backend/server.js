@@ -121,46 +121,39 @@ memberRoutes.route('/update/:login').get(function (req, res) {
         }
     });
 });
-memberRoutes.route('/update/:login').post(async function (req, res) {
-    let membersList = await Member.find({ login: req.body.login });
+memberRoutes.route('/update/:id').post(async function (req, res) {
     let errors = [];
-    let member = membersList[0];
-    console.log(membersList);
-    if (membersList.length == 0) {
-        console.log("Incorrect Login");
-        errors.push("Failliure in connection or Incorrect Password or Login");
-        res.status(200).json({ 'route': '/login', 'status': "KO", 'errors': errors });
-    } else {
-        
-        console.log(member);
-        errors = await generateErrorsForUpdate(req, member);
-    }
-    //Arret de la stack ici
-    if (errors.length > 0) {
-        res.status(200).json({ 'route': '/update/:login', 'errors': errors })
-        return;
-    } else {
-        console.log("j'enregistre");
-        member._id
-        //members.update({ _id: member._id }, { $set: { email: req.body.password } });
-        member.save()
-            .then(member => {
-                res.status(200).json({ 'route': '/login', 'status': "OK", 'member': 'member updated successfully' });
-                //attention les redirects ne se font pas du côté server mais du côté component !!!! reférence create-memeber.component
+    console.log("errors =" + errors);
+    console.log(req.body);
+    let login = req.body.login;
+    console.log( "post update Login = "+login);
+    let email = req.body.email;
+    console.log( "post update email = "+email);
+    const filterLogin = {login : login};
+    const emailToUpdate = {email : email};
+    const doc = await Member.findOneAndUpdate(filterLogin, emailToUpdate);
+    console.log(doc);
+
+    /*Member.findOneAndUpdate(req.params.login, function (err) {
+        let member = membersList[0];
+        console.log("member =" + member);
+        //member est vide
+        if (!member) {
+            errors.push("data is not found");
+            console.log("errors =" + errors);
+            res.status(200).json({ 'route': '/profile/:login', 'errors': errors, 'member': membersList[0] });
+        } else {
+            member.member_email = req.body.member_email;
+            member.save().then(member => {
+                res.status(200).json({ 'route': '/update/:login', 'status': "OK", 'member': 'member updated successfully' });
             })
-            .catch(err => {
-                res.status(200).send({ 'errors': ["Technical error"] });
-            });
-            /*
-            member.save()
-                .then(member => {
-                    res.status(200).json({ 'route': '/update/:login', 'status': "OK", 'member': 'member added successfully' });
-                    //attention les redirects ne se font pas du côté server mais du côté component !!!! reférence create-memeber.component
-                })
                 .catch(err => {
-                    res.status(200).send({ 'route': '/update/:login', 'errors': ["Technical error"] });
-                });*/
-    }
+                    errors.push("Update not possible");
+                    res.status(200).json({ 'route': '/update/:login', 'status': 'KO', 'errors': errors });
+                })
+            console.log("errors =" + errors);
+        }
+    });*/
 });
 memberRoutes.route('/list').get(async function (req, res) {
     let membersList = await Member.find();
@@ -400,6 +393,12 @@ postRoutes.route('/received-list/:login').get(async function (req, res) {
         res.json(postsList);
     }
 });
+/*http://localhost:4242/post/post/delete/:ID
+postRoutes.route('/post/delete/:_id').get(async function (req, res){
+    let login = req.params.login;
+    let postID = req.params._id;
+    let postToDELETE = ;
+})*/
 //http://localhost:4242/post/search-by-key-words
 postRoutes.route('/search-by-key-words/:keyword').get(async function (req, res) {
     let keyword = req.params.keyword;

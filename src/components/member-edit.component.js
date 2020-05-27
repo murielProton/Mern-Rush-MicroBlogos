@@ -80,7 +80,10 @@ export default class UpdateMember extends Component {
         console.log(`Member Email: ${this.state.member_email}`);
         console.log(`Member Password: ${this.state.member_password}`);
         console.log(`Member Admin: ${this.state.member_admin}`)
+        //attention changdesToMember == body de req.body
         var changesToMember = {
+            login: this.state.member_login,
+            email: this.state.member_email,
             password: this.state.member_password
         };
         // On utilise lelogin de l'url et pas la version modifié.
@@ -88,6 +91,7 @@ export default class UpdateMember extends Component {
         // set member => info via POST méthode
         let url = 'http://127.0.0.1:4242/member/update/' + login;
         console.log(changesToMember);
+        console.log(url);
         axios.post(url, changesToMember)
             .then(res => {
                 if (res.data.member === 'member updated successfully') {
@@ -96,7 +100,6 @@ export default class UpdateMember extends Component {
                         member_login: '',
                         member_email: '',
                         member_password: '',
-                        member_password_confirmation: '',
                         member_admin: false,
                         redirect: true
                     });
