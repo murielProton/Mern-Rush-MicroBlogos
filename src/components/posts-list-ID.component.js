@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import {DisplayKeyword, LinkModifyPost, Link_DELETE_Post} from '../Functions.src.js';
+import { DisplayKeyword, LinkModifyPost, Link_DELETE_Post } from '../Functions.src.js';
 
 
 export default class PostsList extends Component {
@@ -9,16 +9,15 @@ export default class PostsList extends Component {
         super(props);
         this.state = {
             posts: [],
-            errors: []
-        };
+            errors: [],
 
+        };
+        this.delete = this.delete.bind(this)
     }
     componentDidMount() {
         // Fournit par path="/my-blog/:id"
-        console.log(this.props.match.params.id);
         let login = this.props.match.params.id
         let url = 'http://localhost:4242/post/my-blog/' + login;
-        console.log(login);
         axios.get(url)
             .then(response => {
                 console.log(response.data);
@@ -27,6 +26,14 @@ export default class PostsList extends Component {
             }).catch(errors => {
                 //J'attrape les erreurs
             });
+    }
+    delete(e) {
+        let idPost= e.target.id;
+        let urlDELETE = 'http://localhost:4242/post/post/DELETE/' + idPost;
+        axios.get(urlDELETE)
+            .then(console.log('Deleted'))
+            .catch(err => console.log(err));
+        this.componentDidMount();
     }
     render() {
         return (
@@ -44,18 +51,18 @@ export default class PostsList extends Component {
                     </thead>
                     <tbody>
                         {this.state.posts.map((item) =>
-                            <tr>
+                            <tr >
                                 <td> {item.content}</td>
                                 <td> {item.date}</td>
                                 <td>
-                                {item.key_words.map(keyword =>
-                                    <DisplayKeyword keyword={keyword} />)}
+                                    {item.key_words.map(keyword =>
+                                        <DisplayKeyword keyword={keyword} />)}
                                 </td>
                                 <td>
                                     <LinkModifyPost id={item._id} />
                                 </td>
                                 <td>
-                                    <Link_DELETE_Post id={item._id} />
+                                    <button onClick={this.delete} className="btn bg-light" id={item._id} >DELETE</button>
                                 </td>
                             </tr>
                         )}
