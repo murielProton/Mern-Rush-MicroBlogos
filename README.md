@@ -75,4 +75,12 @@ req.body.**option of the field** => pour récupérer du formulaire
 
 DELETE https://kb.objectrocket.com/mongo-db/mongoose-deleteone-922
 
-CRUD The MERN Stack Tutorial — Building A React CRUD Application From Start To Finish — Part 2
+CRUD 
+https://medium.com/codingthesmartway-com-blog/the-mern-stack-tutorial-building-a-react-crud-application-from-start-to-finish-part-2-637f337e5d61
+
+SYNTAX pour redirect + :id ou login
+        if (this.state.redirect) {
+            var redirectLogin = this.props.match.params.id;
+            return <Redirect to={`/member/profile/${redirectLogin}`} />;
+        } else {---}
+ici j'utilise this.props.match.params.id car c'est l'info refiler au départ pour afficher ma page, par l'utilisateur. et à cause d'une faut de nommage id === login

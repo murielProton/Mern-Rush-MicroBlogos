@@ -11,3 +11,8 @@ export function LinkModifyPost(props){
   let urlId = "/post/update/" + id;
   return <button type="button" class="btn bg-light keyword"><a href={urlId} >Modifier</a></button>;
 }
+export function Link_DELETE_Post(props){
+  const id = props.id;
+  let urlId = "/post/DELETE/" + id;
+  return <button type="button" class="btn bg-light keyword"><a href={urlId} >DELETE</a></button>;
+}

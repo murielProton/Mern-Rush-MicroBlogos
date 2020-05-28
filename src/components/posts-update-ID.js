@@ -26,7 +26,8 @@ export default class PostUpdate extends Component {
     componentDidMount() {
         let id = this.props.match.params.id;
         this.setState({
-            id: id
+            id: id,
+            redirect: false
         });
         // TODO get post => info via GET méthode
         let url = 'http://127.0.0.1:4242/post/update/' + id;
@@ -41,7 +42,6 @@ export default class PostUpdate extends Component {
                 post_author: post.author,
                 post_date: post.date,
                 post_recipients: post.recipient,
-                redirect: true
             });
 
         }).catch(errors => {
@@ -95,14 +95,8 @@ export default class PostUpdate extends Component {
         axios.post(url, postToUpdate)
             .then(res => {
                 if (res.data.post === 'post updated successfully') {
-                    console.log("Error Post Update Component search 9");
                     //console.log(author);
                     this.setState({
-                        post_key_words: '',
-                        post_content: '',
-                        post_author: '',
-                        post_date: '',
-                        post_recipients: '',
                         redirect: true
                     });
 
@@ -120,9 +114,10 @@ export default class PostUpdate extends Component {
             });
     }
     render() {
-        /*if (this.state.redirect) {
-            return <Redirect to="/post/list/:id" = my blog />
-        }*/
+        if (this.state.redirect == true) {
+            var redirectLogin = localStorage.getItem('login');
+            return <Redirect to={`/my-blog/${redirectLogin}`} />;
+        }
         return (
             <div style={{ marginTop: 10 }}>
                 <h3>update your post</h3>

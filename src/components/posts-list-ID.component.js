@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import {DisplayKeyword, LinkModifyPost} from '../Functions.src.js';
+import {DisplayKeyword, LinkModifyPost, Link_DELETE_Post} from '../Functions.src.js';
 
 
 export default class PostsList extends Component {
@@ -53,6 +53,9 @@ export default class PostsList extends Component {
                                 </td>
                                 <td>
                                     <LinkModifyPost id={item._id} />
+                                </td>
+                                <td>
+                                    <Link_DELETE_Post id={item._id} />
                                 </td>
                             </tr>
                         )}
