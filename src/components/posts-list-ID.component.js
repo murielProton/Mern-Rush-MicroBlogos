@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import {DisplayKeyword} from '../Functions.src.js';
+import {DisplayKeyword, LinkModifyPost} from '../Functions.src.js';
 
 
 export default class PostsList extends Component {
@@ -50,6 +50,9 @@ export default class PostsList extends Component {
                                 <td>
                                 {item.key_words.map(keyword =>
                                     <DisplayKeyword keyword={keyword} />)}
+                                </td>
+                                <td>
+                                    <LinkModifyPost id={item._id} />
                                 </td>
                             </tr>
                         )}

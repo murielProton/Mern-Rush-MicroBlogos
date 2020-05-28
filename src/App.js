@@ -16,37 +16,37 @@ import CreatePost from "./components/post-create.component";
 import ListOfPosts from "./components/posts-list.component";
 import MyPosts from "./components/posts-list-ID.component";
 import MyMail from "./components/posts-list-ID-received.component";
+import UpdatePost from "./components/posts-update-ID";
 /*import DELETEPost from ".components/posts-delete-ID.component";*/
 import SearchByKeyWords from "./components/post-search-key-word.component";
 import KeyWordsList from "./components/post-key-words-list.component";
 
 function LinkUserConnected(props) {
   const isLoggedIn = props.isLoggedIn;
+  const postID = "noIDEE";
   //const keyWord = props.
   let urlMyBlog = "/my-blog/" + isLoggedIn;
   let urlMyMail = "/post/received-list/" + isLoggedIn;
   let urlMyProfile = "/member/profile/" + isLoggedIn;
   let urlUpdateProfile = "/member/update/" + isLoggedIn;
-  {/*let urlDeletPost ="/post/delete/";//+id du post à suprimer;*/}
+  let urlUpdatePost = "/post/update/" + postID;
+  {/*let urlDeletPost ="/post/delete/";//+id du post à suprimer;*/ }
   if (isLoggedIn) {
-    return     <ul className="navbar-nav mr-auto">
+    return <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
         <Link to="/member/list" className="nav-link">Liste des Membres</Link>
+      </li>
+      <li className="navbar-item">
+        <Link to={urlMyProfile} className="nav-link">Voir Mon Profil</Link>
+      </li>
+      <li className="navbar-item">
+        <Link to={urlUpdateProfile} className="nav-link">Profile update</Link>
       </li>
       <li className="navbar-item">
         <Link to="/post/create" className="nav-link">Chanter</Link>
       </li>
       <li className="navbar-item">
         <Link to="/post/list" className="nav-link">Chants</Link>
-      </li>
-      {/*<li className="navbar-item">
-        <Link to="/post/delete" className="nav-link">Delete Post</Link>
-      </li>*/}
-      <li className="navbar-item">
-        <Link to={urlMyProfile} className="nav-link">Voir Mon Profil</Link>
-      </li>
-      <li className="navbar-item">
-        <Link to={urlUpdateProfile} className="nav-link">Profile update</Link>
       </li>
       <li className="navbar-item">
         <Link to={urlMyBlog} className="nav-link">Mon Blog</Link>
@@ -58,8 +58,8 @@ function LinkUserConnected(props) {
         <Link to="/post/key-words-list" className="nav-link">List de Mots Clefs</Link>
       </li>
       <li className="navbar-item">
-      <Link to="/logout" className="nav-link">Logout </Link>
-    </li>
+        <Link to="/logout" className="nav-link">Logout </Link>
+      </li>
     </ul>;
   } else {
     return <ul className="navbar-nav mr-auto"><li className="navbar-item">
@@ -111,11 +111,12 @@ class App extends Component {
           <Route path="/member/profile/:id" component={SeeMyProfile} />
           <Route path="/register" component={CreateMember} />
           <Route path="/login" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} />} />
-          <Route path="/logout" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} logout={true}/>} />
+          <Route path="/logout" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} logout={true} />} />
           <Route path="/post/create" component={CreatePost} />
           <Route path="/post/list" component={ListOfPosts} />
           <Route path="/my-blog/:id" component={MyPosts} />
           <Route path="/post/received-list/:id" component={MyMail} />
+          <Route path="/post/update/:id" component={UpdatePost} />
           {/*<Route path="/post/delete/:id" component={DELETEPost} />*/}
           <Route path="/post/search-by-key-words/:id" component={SearchByKeyWords} />
           <Route path="/post/key-words-list" component={KeyWordsList} />

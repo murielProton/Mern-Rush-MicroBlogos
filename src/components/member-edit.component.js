@@ -32,12 +32,7 @@ export default class UpdateMember extends Component {
         let url = 'http://127.0.0.1:4242/member/update/' + login;
         axios.get(url)
             .then(response => {
-                console.log("process get");
-                console.log(response.data.member);
                 let member = response.data.member;
-                console.log(member);
-                console.log(member.email);
-                console.log("component pwd" + response.date.password);
                 this.setState({
                     member_id: member._id,
                     member_login: member.login,
@@ -50,7 +45,7 @@ export default class UpdateMember extends Component {
                 //c'est comme cela que j'attrappe mes erreurs
                 console.log(this.state.login);
             });
-            
+
     }
     onChangeMemberLogin(e) {
         this.setState({
@@ -75,18 +70,13 @@ export default class UpdateMember extends Component {
     }
     onSubmit(e) {
         e.preventDefault();
-        console.log("Form submitted:");
-        console.log(`Member Login: ${this.state.member_login}`);
-        console.log(`Member Email: ${this.state.member_email}`);
-        console.log(`Member Password: ${this.state.member_password}`);
-        console.log(`Member Admin: ${this.state.member_admin}`)
         //attention changdesToMember == body de req.body
         var changesToMember = {
             login: this.state.member_login,
             email: this.state.member_email,
             password: this.state.member_password
         };
-        console.log("on submit "+ this.state.member_password );
+        console.log("on submit " + this.state.member_password);
         // On utilise lelogin de l'url et pas la version modifié.
         let login = this.props.match.params.id;
         // set member => info via POST méthode
@@ -121,42 +111,42 @@ export default class UpdateMember extends Component {
             var redirectLogin = this.state.login;
             return <Redirect to={`/member/profile/${redirectLogin}`}/>;
         } else {*/
-            return (
-                <div style={{ marginTop: 10 }}>
-                    <h3>Update Profile  {this.props.match.params.id}</h3>
-                    {this.state.errors.map((item) =>
-                        <h4>{item}</h4>
-                    )}
-                    <div>
-                        Your Login : {this.state.member_login}
-                    </div>
-                    <form onSubmit={this.onSubmit}>
-                        <div className="form-group">
-                            <label>Change your Email: </label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={this.state.member_email}
-                                onChange={this.onChangeMemberEmail}
-                            />
-                        </div>
-                        <div>
-                            Please do confirm your identity by entering your password.
-                    </div>
-                        <div className="form-group">
-                            <label>Password : </label>
-                            <input type="password"
-                                className="form-control"
-                                value={this.state.member_password}
-                                onChange={this.onChangeMemberPassword}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <input type="submit" value="update" className="btn btn-light" />
-                        </div>
-                    </form>
+        return (
+            <div style={{ marginTop: 10 }}>
+                <h3>Update Profile  {this.props.match.params.id}</h3>
+                {this.state.errors.map((item) =>
+                    <h4>{item}</h4>
+                )}
+                <div>
+                    Your Login : {this.state.member_login}
                 </div>
-            )
-       // }
+                <form onSubmit={this.onSubmit}>
+                    <div className="form-group">
+                        <label>Change your Email: </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={this.state.member_email}
+                            onChange={this.onChangeMemberEmail}
+                        />
+                    </div>
+                    <div>
+                        Please do confirm your identity by entering your password.
+                    </div>
+                    <div className="form-group">
+                        <label>Password : </label>
+                        <input type="password"
+                            className="form-control"
+                            value={this.state.member_password}
+                            onChange={this.onChangeMemberPassword}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input type="submit" value="update" className="btn btn-light" />
+                    </div>
+                </form>
+            </div>
+        )
+        // }
     }
 }

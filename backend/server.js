@@ -122,22 +122,15 @@ memberRoutes.route('/update/:login').get(async function (req, res) {
     }
 });
 memberRoutes.route('/update/:login').post(async function (req, res) {
-    console.log("je suis dans update post");
-    console.log(req.params.login);
+    console.log("je suis dans update post Member routes");
     let membersList = await Member.find({ login: req.params.login });
-    console.log(membersList);
     let member = membersList[0];
-    console.log("update member " + member);
     let errors = await generateErrorsForUpdate(req, member);
-    console.log("errors =" + errors);
-    console.log(req.body);
     let login = req.body.login;
-    console.log("post update Login = " + login);
     let email = req.body.email;
-    console.log("post update email = " + email);
     const filterLogin = { login: login };
     if (filterLogin == undefined || filterLogin == null) {
-        errors.push("data is not found");
+        errors.push("filterLogin data is not found");
         console.log("errors =" + errors);
         res.status(200).json({ 'route': '/update/:id', 'errors': errors });
         return;
@@ -423,6 +416,56 @@ postRoutes.route('/search-by-key-words/:keyword').get(async function (req, res) 
 postRoutes.route('/key-words-list').get(async function (req, res) {
     let listOfKeyWords = await findAllKeyWords();
     res.status(200).json({ 'keywords': listOfKeyWords });
+});
+//http://127.0.0.1:4242/post/update/:id
+postRoutes.route('/update/:id').get(async function (req, res) {
+    let postsList = await Post.find({ _id: req.params.id });
+    let errors = [];
+    console.log("in server post update posts list" + postsList)
+    console.log("in server post update errors " + errors)
+    if (postsList.length > 0) {
+        res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'post': postsList[0] });
+    } else {
+        errors.push("No posts in data base.");
+        res.status(200).json({ 'route': '/update/:login', 'errors': errors, 'post': {} });
+    }
+});
+postRoutes.route('/update/:id').post(async function (req, res) {
+    console.log("je suis dans update post Post Routes");
+    let postsList = await Post.find({ _id: req.params.id });
+    let post = postsList[0];
+    let errors = await generateErrorsForPostsCreate(req);
+    let id = req.params.id;
+    let content = req.body.content;
+    const filterId = { _id: id };
+    console.log("filterId =" + filterId);
+    console.log("errors =" + errors);
+    if (filterId == undefined || filterId == null) {
+        errors.push("filterId data is not found");
+        console.log("errors =" + errors);
+        res.status(200).json({ 'route': '/update/:id', 'errors': errors });
+        return;
+    }
+    if (errors.length > 0) {
+        res.status(200).json({ 'errors': errors })
+        console.log("errors = " + errors);
+        return;
+    } else {
+        const contentToUpdate = { content: content };
+        const doc = await Post.findOneAndUpdate(filterId, contentToUpdate, { $set: { useFindAndModify: false } });
+        console.log("contentToUpdate =" + contentToUpdate);//udefined
+        console.log("contentToUpdate =" + contentToUpdate[1]);
+        console.log("contentToUpdate =" + contentToUpdate[2]);
+        console.log("doc =" + doc);
+        doc.save().then(post => {
+            res.status(200).json({ 'route': '/my-blog/:login', 'status': "OK", 'post': 'post updated successfully' });
+        })
+            .catch(err => {
+                errors.push("Post update not possible");
+                res.status(200).json({ 'route': '/update/:id', 'status': 'KO', 'errors': errors });
+            })
+        console.log("errors =" + errors);
+    }
 });
 app.use('/post', postRoutes);
 /* FIN des ROUTES POSTS--------------------------------------------------------------------*/
