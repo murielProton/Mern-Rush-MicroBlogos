@@ -390,12 +390,6 @@ postRoutes.route('/received-list/:login').get(async function (req, res) {
         res.json(postsList);
     }
 });
-/*http://localhost:4242/post/post/delete/:ID
-postRoutes.route('/post/delete/:_id').get(async function (req, res){
-    let login = req.params.login;
-    let postID = req.params._id;
-    let postToDELETE = ;
-})*/
 //http://localhost:4242/post/search-by-key-words
 postRoutes.route('/search-by-key-words/:keyword').get(async function (req, res) {
     let keyword = req.params.keyword;
@@ -467,6 +461,20 @@ postRoutes.route('/update/:id').post(async function (req, res) {
         console.log("errors =" + errors);
     }
 });
+//http://localhost:4242/post/post/DELETE/:id
+/*postRoutes.route('/post/DELETE/:id').get(async function (req, res) {
+    let errors = [];
+    let login = req.params.login;
+    let postID = req.params._id;
+    let postToDELETE = await Post.findByIdAndRemove({ id: req.params.id });
+        if (err) {
+            errors.push("DELETE of this post unsuccessfull.")
+            res.status(200).json({ 'route': '/my-blog/:login', 'status': 'KO', 'errors': errors });
+        }
+        else {
+            res.status(200).json({ 'route': '/my-blog/:login', 'status': 'OK', 'errors': errors });
+        }
+});*/
 app.use('/post', postRoutes);
 /* FIN des ROUTES POSTS--------------------------------------------------------------------*/
 /* DEBUT des FONCTIONS UTILES POSTS---------------------------------------------------------------*/

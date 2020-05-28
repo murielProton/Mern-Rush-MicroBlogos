@@ -3,7 +3,7 @@ Attention pas d'ettat client serveur API must be restfull pas de gestion des ses
 */
 
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -106,20 +106,22 @@ class App extends Component {
             </div>
           </nav>
           <br />
-          <Route path="/member/list" component={MembersList} />
-          <Route path="/member/update/:id" component={EditMember} />
-          <Route path="/member/profile/:id" component={SeeMyProfile} />
-          <Route path="/register" component={CreateMember} />
-          <Route path="/login" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} />} />
-          <Route path="/logout" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} logout={true} />} />
-          <Route path="/post/create" component={CreatePost} />
-          <Route path="/post/list" component={ListOfPosts} />
-          <Route path="/my-blog/:id" component={MyPosts} />
-          <Route path="/post/received-list/:id" component={MyMail} />
-          <Route path="/post/update/:id" component={UpdatePost} />
-          {/*<Route path="/post/delete/:id" component={DELETEPost} />*/}
-          <Route path="/post/search-by-key-words/:id" component={SearchByKeyWords} />
-          <Route path="/post/key-words-list" component={KeyWordsList} />
+          <Switch>
+            <Route path="/member/list" component={MembersList} />
+            <Route path="/member/update/:id" component={EditMember} />
+            <Route path="/member/profile/:id" component={SeeMyProfile} />
+            <Route path="/register" component={CreateMember} />
+            <Route path="/login" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} />} />
+            <Route path="/logout" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} logout={true} />} />
+            <Route path="/post/create" component={CreatePost} />
+            <Route path="/post/list" component={ListOfPosts} />
+            <Route path="/my-blog/:id" component={MyPosts} />
+            <Route path="/post/received-list/:id" component={MyMail} />
+            <Route path="/post/update/:id" component={UpdatePost} />
+            {/*<Route path="/post/delete/:id" component={DELETEPost} />*/}
+            <Route path="/post/search-by-key-words/:id" component={SearchByKeyWords} />
+            <Route path="/post/key-words-list" component={KeyWordsList} />
+          </Switch>
         </div>
       </Router >
     );
