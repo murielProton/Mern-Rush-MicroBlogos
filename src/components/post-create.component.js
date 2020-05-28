@@ -100,7 +100,7 @@ export default class CreatePost extends Component {
         }
         return (
             <div style={{ marginTop: 10 }}>
-                <h3>Glatir</h3>
+                <h3>Post a Mini- Tweet</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}

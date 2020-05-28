@@ -22,7 +22,7 @@ export default class PostList extends Component {
     render() {
         return (
             <div>
-                <h3>Les glatits des Aigles</h3>
+                <h3>List of All the Posts</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}

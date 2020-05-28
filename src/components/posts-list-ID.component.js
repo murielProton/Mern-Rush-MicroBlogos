@@ -38,7 +38,7 @@ export default class PostsList extends Component {
     render() {
         return (
             <div>
-                <h3>Mon Blog par {this.props.match.params.id}</h3>
+                <h3>My Blog by {this.props.match.params.id}</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
@@ -47,6 +47,7 @@ export default class PostsList extends Component {
                         <tr>
                             <th>Content</th>
                             <th>Date</th>
+                            <th>Search By Keywords</th>
                         </tr>
                     </thead>
                     <tbody>

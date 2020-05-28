@@ -34,28 +34,28 @@ function LinkUserConnected(props) {
   if (isLoggedIn) {
     return <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
-        <Link to="/member/list" className="nav-link">Liste des Membres</Link>
+        <Link to="/member/list" className="nav-link">Members's List</Link>
       </li>
       <li className="navbar-item">
-        <Link to={urlMyProfile} className="nav-link">Voir Mon Profil</Link>
+        <Link to={urlMyProfile} className="nav-link">See My Profil</Link>
       </li>
       <li className="navbar-item">
         <Link to={urlUpdateProfile} className="nav-link">Profile update</Link>
       </li>
       <li className="navbar-item">
-        <Link to="/post/create" className="nav-link">Chanter</Link>
+        <Link to="/post/create" className="nav-link">Post a Tweet</Link>
       </li>
       <li className="navbar-item">
-        <Link to="/post/list" className="nav-link">Chants</Link>
+        <Link to="/post/list" className="nav-link">List Of All Tweets</Link>
       </li>
       <li className="navbar-item">
-        <Link to={urlMyBlog} className="nav-link">Mon Blog</Link>
+        <Link to={urlMyBlog} className="nav-link">My Blog</Link>
       </li>
       <li className="navbar-item">
-        <Link to={urlMyMail} className="nav-link">Reçuts</Link>
+        <Link to={urlMyMail} className="nav-link">Received</Link>
       </li>
       <li className="navbar-item">
-        <Link to="/post/key-words-list" className="nav-link">List de Mots Clefs</Link>
+        <Link to="/post/key-words-list" className="nav-link">List of Keywords</Link>
       </li>
       <li className="navbar-item">
         <Link to="/logout" className="nav-link">Logout </Link>
