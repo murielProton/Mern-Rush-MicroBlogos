@@ -462,19 +462,23 @@ postRoutes.route('/update/:id').post(async function (req, res) {
     }
 });
 //http://localhost:4242/post/post/DELETE/:id
-/*postRoutes.route('/post/DELETE/:id').get(async function (req, res) {
+postRoutes.route('/post/DELETE/:id').get(async function (req, res) {
     let errors = [];
-    let login = req.params.login;
-    let postID = req.params._id;
-    let postToDELETE = await Post.findByIdAndRemove({ id: req.params.id });
-        if (err) {
-            errors.push("DELETE of this post unsuccessfull.")
+    let postID = req.params.id;
+    let postToDELETE = await Post.findByIdAndRemove({ _id: postID });
+    console.log("server post DELETE errors : "+errors);
+    console.log("server post DELETE post id : "+postID);
+    console.log("server post DELETE postToDELETE : "+postToDELETE);
+    Post.findByIdAndRemove({_id: postID}, function(errors, business){
+        if(errors) {
+            console.log("server post DELETE errors : "+errors);
             res.status(200).json({ 'route': '/my-blog/:login', 'status': 'KO', 'errors': errors });
         }
         else {
             res.status(200).json({ 'route': '/my-blog/:login', 'status': 'OK', 'errors': errors });
-        }
-});*/
+        };
+    });
+});
 app.use('/post', postRoutes);
 /* FIN des ROUTES POSTS--------------------------------------------------------------------*/
 /* DEBUT des FONCTIONS UTILES POSTS---------------------------------------------------------------*/
