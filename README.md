@@ -78,6 +78,8 @@ DELETE https://kb.objectrocket.com/mongo-db/mongoose-deleteone-922
 CRUD 
 https://medium.com/codingthesmartway-com-blog/the-mern-stack-tutorial-building-a-react-crud-application-from-start-to-finish-part-2-637f337e5d61
 
+https://appdividend.com/2018/11/11/react-crud-example-mern-stack-tutorial/
+
 SYNTAX pour redirect + :id ou login
         if (this.state.redirect) {
             var redirectLogin = this.props.match.params.id;

@@ -120,7 +120,7 @@ export default class PostUpdate extends Component {
         }
         return (
             <div style={{ marginTop: 10 }}>
-                <h3>update your post</h3>
+                <h3>update this post</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}

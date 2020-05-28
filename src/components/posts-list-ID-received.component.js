@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-export default class PostsList extends Component {
+export default class PostsListReceived extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -31,7 +31,7 @@ export default class PostsList extends Component {
     render() {
         return (
             <div>
-                <h3>Ma boite de Reception {this.props.match.params.id}</h3>
+                <h3>Your Personal Mail Box, {this.props.match.params.id}</h3>
                 {this.state.errors.map((item) =>
                     <h4>{item}</h4>
                 )}
