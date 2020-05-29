@@ -16,6 +16,7 @@ export default class PostsList extends Component {
     }
     componentDidMount() {
         // Fournit par path="/my-blog/:id"
+        // récuperer une variable dans l'url côté front this.props.....
         let login = this.props.match.params.id
         let url = 'http://localhost:4242/post/my-blog/' + login;
         axios.get(url)
