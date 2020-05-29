@@ -94,3 +94,9 @@ L'actif :
 while condition look at model et model répond. Le front comprend un observateur (implémenté dans le code) qui va chercher dans le front à interval régulier l'information.
 Le Passif :
 a chaque requête de l'utilisateur (physique), le  front va checher dans le back pour récupérer l'information.
+
+MONGO DB Ligne de commande
+suprimer le member dont le login est suprimer dans la collection members.
+db.members.remove({login:"suprimer"})
+ou
+db.**collection**.remove({**field name** : "**string to delete**"})
