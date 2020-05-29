@@ -17,20 +17,17 @@ import ListOfPosts from "./components/posts-list.component";
 import MyPosts from "./components/posts-list-ID.component";
 import MyMail from "./components/posts-list-ID-received.component";
 import UpdatePost from "./components/posts-update-ID";
-/*import DELETEPost from ".components/posts-delete-ID.component";*/
 import SearchByKeyWords from "./components/post-search-key-word.component";
 import KeyWordsList from "./components/post-key-words-list.component";
 
 function LinkUserConnected(props) {
   const isLoggedIn = props.isLoggedIn;
   const postID = "noIDEE";
-  //const keyWord = props.
   let urlMyBlog = "/my-blog/" + isLoggedIn;
   let urlMyMail = "/post/received-list/" + isLoggedIn;
   let urlMyProfile = "/member/profile/" + isLoggedIn;
   let urlUpdateProfile = "/member/update/" + isLoggedIn;
   let urlUpdatePost = "/post/update/" + postID;
-  {/*let urlDeletPost ="/post/delete/";//+id du post à suprimer;*/ }
   if (isLoggedIn) {
     return <ul className="navbar-nav mr-auto">
       <li className="navbar-item">
