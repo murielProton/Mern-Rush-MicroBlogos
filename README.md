@@ -86,3 +86,11 @@ SYNTAX pour redirect + :id ou login
             return <Redirect to={`/member/profile/${redirectLogin}`} />;
         } else {---}
 ici j'utilise this.props.match.params.id car c'est l'info refiler au départ pour afficher ma page, par l'utilisateur. et à cause d'une faut de nommage id === login
+
+
+TEMPS REEL
+il y a deux sortes de temps réel en informatique : l'actif et le passif.
+L'actif :
+while condition look at model et model répond. Le front comprend un observateur (implémenté dans le code) qui va chercher dans le front à interval régulier l'information.
+Le Passif :
+a chaque requête de l'utilisateur (physique), le  front va checher dans le back pour récupérer l'information.

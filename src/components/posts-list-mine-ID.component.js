@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { DisplayKeyword, LinkModifyPost, Link_DELETE_Post } from '../Functions.src.js';
+import { DisplayKeyword, LinkModifyPost } from '../Functions.src.js';
 
 
-export default class PostsList extends Component {
+export default class PostsListOfMine extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,6 +15,13 @@ export default class PostsList extends Component {
         this.delete = this.delete.bind(this)
     }
     componentDidMount() {
+        this.intervalID = setInterval(
+            () => this.tick(),
+            1000
+        );
+        this.getMyListOfTweets();
+    }
+    getMyListOfTweets(){
         // Fournit par path="/my-blog/:id"
         // récuperer une variable dans l'url côté front this.props.....
         let login = this.props.match.params.id
@@ -27,6 +34,12 @@ export default class PostsList extends Component {
             }).catch(errors => {
                 //J'attrape les erreurs
             });
+    }
+    tick() {
+        this.getMyListOfTweets();
+    }
+    componentWillUnmount() {
+        clearInterval(this.intervalID);
     }
     delete(e) {
         let idPost= e.target.id;

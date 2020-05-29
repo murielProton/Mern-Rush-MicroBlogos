@@ -11,6 +11,12 @@ export default class MemberList extends Component {
         };
     }
     componentDidMount() {
+        this.intervalID = setInterval(
+            () => this.tick(),
+            1000
+        );
+    }
+    getMembers() {
         axios.get('http://localhost:4242/member/list')
             .then(response => {
                 this.setState({ members: response.data });
@@ -18,6 +24,12 @@ export default class MemberList extends Component {
             }).catch(function (errors) {
                 console.log(errors);
             })
+    }
+    tick() {
+        this.getMembers();
+    }
+    componentWillUnmount() {
+        clearInterval(this.intervalID);
     }
     render() {
         return (

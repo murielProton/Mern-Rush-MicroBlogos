@@ -13,11 +13,11 @@ import CreateMember from "./components/member-create.component";
 import SeeMyProfile from "./components/member-profile-ID.component";
 import Login from "./components/login.component";
 import CreatePost from "./components/post-create.component";
-import ListOfPosts from "./components/posts-list.component";
-import MyPosts from "./components/posts-list-ID.component";
-import MyMail from "./components/posts-list-ID-received.component";
+import ListOfAllPosts from "./components/posts-list-all.component";
+import MyPosts from "./components/posts-list-mine-ID.component";
+import MyMail from "./components/posts-list-received-ID.component";
 import UpdatePost from "./components/posts-update-ID";
-import SearchByKeyWords from "./components/post-search-key-word.component";
+import SearchByKeyWords from "./components/post-key-word-search.component";
 import KeyWordsList from "./components/post-key-words-list.component";
 
 function LinkUserConnected(props) {
@@ -68,7 +68,6 @@ function LinkUserConnected(props) {
     </ul>;
   }
 }
-
 class App extends Component {
   constructor(props) {
     super(props)
@@ -111,7 +110,7 @@ class App extends Component {
             <Route path="/login" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} />} />
             <Route path="/logout" render={(props) => <Login {...props} setLogin={this.setLogin} getLogin={this.getLogin} logout={true} />} />
             <Route path="/post/create" component={CreatePost} />
-            <Route path="/post/list" component={ListOfPosts} />
+            <Route path="/post/list" component={ListOfAllPosts} />
             <Route path="/my-blog/:id" component={MyPosts} />
             <Route path="/post/received-list/:id" component={MyMail} />
             <Route path="/post/update/:id" component={UpdatePost} />
