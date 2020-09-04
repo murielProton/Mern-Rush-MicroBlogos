@@ -50,7 +50,7 @@ export default class PostList extends Component {
                     </thead>
                     <tbody>
                         {this.state.posts.map((item) =>
-                            <tr key={item.__ID}>
+                            <tr key={item.date}>
                                 <td>{item.author}</td>
                                 <td> {item.date}</td>
                                 <td> {item.content}</td>
