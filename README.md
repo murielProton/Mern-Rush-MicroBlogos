@@ -1,5 +1,5 @@
 # Mern-Rush-MicroBlogos
-Alone School Project => create a small blog in 8 days
+Alone School Project => create a small blog in 8 days. MERN Languages : MongoDB, Express, React, NodeJS
 site web à regarder avant de commencer le Rush
 conseillé par le pdf
 https://alligator.io/react/mern-stack-intro/
