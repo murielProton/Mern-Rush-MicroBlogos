@@ -1,5 +1,5 @@
 # Mern-Rush-MicroBlogos
-Projet en solitaire de 8 jours.
+Projet en solitaire de 14 jours.
 MERN Langages informatiques : MongoDB, Express, React, NodeJS
 
 Ce document contient : une liste des sources qui m'ont servies durant cet exercisse, des notes concernant le lancement du projet, du code pure et dur pour m'aider lors des projets suivants, et des commentaires pouvant m'aider par la suite dans cette Stack.
